@@ -30,4 +30,11 @@ body {
   .text-balance {
     text-wrap: balance;
   }
+  .text-stroke {
+    text-shadow: 
+      1px 1px 0 #32B7FF, 
+      -1px -1px 0 #32B7FF, 
+      4px -1px 0 #32B7FF, 
+      -1px 1px 0 #32B7FF;
+  }
 }
