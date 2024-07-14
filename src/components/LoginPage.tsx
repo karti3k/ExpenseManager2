@@ -17,7 +17,7 @@ const LoginPage: React.FC = () => {
                     <div className='w-full px-8 flex flex-col items-center justify-evenly'><Image src={AppIcon} alt='AppIcon' width={70}>
                         </Image><Image src={LoginPageImg} alt='login-page-icon' width={350} height={50} className='pr-12 pb-12 drop-shadow-lg' ></Image>
                         <div className='flex flex-col justify-center items-center gap-4'><h2 className='text-5xl font-bold text-stroke'>Hello User!</h2>
-                            <h3 className='text-xl font-bold text-center'>Manage your expenses easily with our simpl & easy-to-use web-app.</h3>
+                            <h3 className='text-xl font-bold text-center'>Manage your expenses easily with our simple free-to-use web-app.</h3>
                         </div>
                     </div>
                 </div>
