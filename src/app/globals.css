@@ -38,3 +38,7 @@ body {
       -1px 1px 0 #32B7FF;
   }
 }
+
+.icon-filter-gray {
+  filter: invert(37%) sepia(0%) saturate(0%) hue-rotate(186deg) brightness(94%) contrast(87%);
+}
