@@ -6,10 +6,40 @@ import AppIcon from '@/assets/AppIcon.png';
 import EmailIcon from '@/assets/email_icon.svg';
 import UsernameIcon from '@/assets/username_icon.svg';
 import PasswordIcon from '@/assets/password_icon.svg';
-// import GoogleIcon from '@/assets/google-icon.png'; //we will use this later
 
 const LoginPage: React.FC = () => {
     const [isSignUp, setIsSignUp] = useState(false);
+    const [email, setEmail] = useState('');
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+
+    const handleSubmit = async (event: React.FormEvent) => {
+        event.preventDefault();
+
+        const url = isSignUp ? 'http://localhost/my_project/signup.php' : 'http://localhost/my_project/signin.php';
+        const body = isSignUp
+            ? JSON.stringify({ email, username, password })
+            : JSON.stringify({ username, password });
+
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body,
+        });
+
+        const data = await response.json();
+        console.log(data);
+
+        if (data.success) {
+            // Handle successful signup/signin
+            alert(`User ${isSignUp ? 'signed up' : 'signed in'} with ${isSignUp ? `email: ${data.email}` : `username: ${data.username}`}`);
+        } else {
+            // Handle error
+            alert(`Signup/Signin failed: ${data.message}`);
+        }
+    };
 
     return (
         <div className="relative h-screen">
@@ -43,13 +73,15 @@ const LoginPage: React.FC = () => {
                             </button>
                         </div>
 
-                        <form>
+                        <form onSubmit={handleSubmit}>
                             {isSignUp && (
                                 <div className="mb-4 relative">
                                     <Image src={EmailIcon} alt="Email Icon" className="absolute left-3 top-2.5 w-5 h-5 icon-filter-gray" />
                                     <input
                                         type="email"
                                         placeholder="Email"
+                                        value={email}
+                                        onChange={(e) => setEmail(e.target.value)}
                                         className="w-full py-2 pl-10 pr-4 bg-custom-lightgray text-custom-darkgray font-semibold border border-gray-300 rounded-3xl"
                                     />
                                 </div>
@@ -59,6 +91,8 @@ const LoginPage: React.FC = () => {
                                 <input
                                     type="text"
                                     placeholder="Username"
+                                    value={username}
+                                    onChange={(e) => setUsername(e.target.value)}
                                     className="w-full py-2 pl-10 pr-4 bg-custom-lightgray text-custom-darkgray font-semibold border border-gray-300 rounded-3xl"
                                 />
                             </div>
@@ -67,6 +101,8 @@ const LoginPage: React.FC = () => {
                                 <input
                                     type="password"
                                     placeholder="Password"
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
                                     className="w-full py-2 pl-10 pr-4 bg-custom-lightgray text-custom-darkgray font-semibold border border-gray-300 rounded-3xl"
                                 />
                             </div>
@@ -74,19 +110,19 @@ const LoginPage: React.FC = () => {
                             {isSignUp ? (
                                 <div className="mb-4">
                                     {/* Add password strength checker logic here */}
-                                    <p className='text-custom-darkgray'>Password Strength: {/* Logic for password strength */}</p>
+                                    <p className='text-custom-darkgray text-xs'>Password Strength: {/* Logic for password strength */}</p>
                                 </div>
                             ) : (
                                 <div className="flex justify-between items-center mb-4">
-                                    <label className="flex items-center">
-                                        <input type="checkbox" className="mr-2" />
-                                        <p className='text-custom-darkgray lg:text-normal text-xs'>Remember me</p>
+                                    <label className="flex items-center hover:cursor-pointer">
+                                        <input type="checkbox" className="mr-2 hover:cursor-pointer" />
+                                        <p className='text-custom-darkgray lg:text-normal text-xs '>Remember me</p>
                                     </label>
-                                    <a href="#" className="text-custom-blueshade lg:text-normal text-xs">Forgot password?</a>
+                                    <a href="#" className="text-custom-blueshade lg:text-normal text-xs hover:text-custom-darkgray">Forgot password?</a>
                                 </div>
                             )}
 
-                            <button className="w-full bg-custom-blueshade rounded-3xl text-white py-2">
+                            <button type="submit" className="w-full bg-custom-blueshade rounded-3xl text-white py-2 hover:brightness-90">
                                 {isSignUp ? 'Sign Up' : 'Continue'}
                             </button>
                         </form>
