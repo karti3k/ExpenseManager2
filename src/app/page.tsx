@@ -12,8 +12,9 @@ export default function Home() {
   };
 
   return (
-    <main>
-      {isLoggedIn ? <MainPage /> : <LoginPage onLogin={handleLogin} />}
+    <main className='bg-white'>
+      {/* {isLoggedIn ? <MainPage /> : <LoginPage onLogin={handleLogin} />} */}
+      <MainPage />
     </main>
   );
 }
