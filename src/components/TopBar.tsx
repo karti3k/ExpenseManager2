@@ -11,15 +11,15 @@ import LoadingGIF from '@/assets/loading.gif'
 
 const TopBar = () => {
     return (
-        <header>
+        <header className='absolute z-10 w-full'>
             <nav className='w-full h-12 bg-custom-gradient text-white flex items-center justify-between px-14'>
-                <h1 className='pb-2 drop-shadow-2xl text-3xl'>Expense Manager</h1>
+                <h1 className='pb-2 drop-shadow-3xl text-3xl'>Expense Manager</h1>
                 <ul className='font-poppins text-md flex font-light'>
-                    <li className='flex gap-2 hover:cursor-pointer ml-8'><Image src={DarkModeIcon} alt='change theme:' width={16} height={16} className='icon-filter-white'></Image>Theme</li>
-                    <li className='flex gap-2 hover:cursor-pointer ml-8'><Image src={AddCategoryicon} alt='add category:' width={16} height={16} className='icon-filter-white'></Image>Categories</li>
-                    <li className='flex gap-1 hover:cursor-pointer ml-8'><Image src={DeleteHistoryIcon} alt='deleted history:' width={16} height={16} className='icon-filter-white'></Image>Trash</li>
-                    <li className='flex gap-1 hover:cursor-pointer ml-6'><Image src={HelpIcon} alt='help:' width={24} height={24} className='icon-filter-white'></Image>Help</li>
-                    <li className='flex gap-1 hover:cursor-pointer ml-8'> <Image src={UsernameIcon} alt='username:' width={17} height={17} className='icon-filter-white'></Image>karti3k<Image src={AccountSelectIcon} alt='username:' width={16} height={16} className='icon-filter-white'></Image></li>
+                    <li className='flex gap-1 hover:cursor-pointer ml-8 drop-shadow-lg'><Image src={DarkModeIcon} alt='change theme:' width={16} height={16} className='icon-filter-white'></Image>Theme</li>
+                    <li className='flex gap-2 hover:cursor-pointer ml-8 drop-shadow-lg'><Image src={AddCategoryicon} alt='add category:' width={16} height={16} className='icon-filter-white'></Image>Categories</li>
+                    <li className='flex gap-1 hover:cursor-pointer ml-8 drop-shadow-lg'><Image src={DeleteHistoryIcon} alt='deleted history:' width={16} height={16} className='icon-filter-white'></Image>Trash</li>
+                    <li className='flex gap-1 hover:cursor-pointer ml-6 drop-shadow-lg'><Image src={HelpIcon} alt='help:' width={24} height={24} className='icon-filter-white'></Image>Help</li>
+                    <li className='flex gap-1 hover:cursor-pointer ml-8 drop-shadow-lg'> <Image src={UsernameIcon} alt='username:' width={17} height={17} className='icon-filter-white'></Image>karti3k<Image src={AccountSelectIcon} alt='username:' width={16} height={16} className='icon-filter-white'></Image></li>
                 </ul>
             </nav>
 
@@ -30,7 +30,7 @@ const TopBar = () => {
                 </div>
                 <div className='w-1/3 flex flex-col justify-center gap-1 items-center border-x-2 border-slate-200'>
                     <div className='flex justify-center'>
-                        <Image src={LoadingGIF} alt='happy-icon' width={100} height={50} className=''></Image> 
+                        <Image src={LoadingGIF} alt='happy-icon' width={100} height={50} className='opacity-0'></Image> 
                     </div>
                 </div>
                 <div className='w-1/3 flex flex-col justify-center'>
