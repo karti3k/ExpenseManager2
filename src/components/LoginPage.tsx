@@ -121,19 +121,19 @@ const LoginPage: React.FC = () => {
                             {isSignUp ? (
                                 <div className="mb-4">
                                     {/* Add password strength checker logic here */}
-                                    <p className='text-custom-darkgray'>Password Strength: {/* Logic for password strength */}</p>
+                                    <p className='text-custom-darkgray text-xs'>Password Strength: {/* Logic for password strength */}</p>
                                 </div>
                             ) : (
                                 <div className="flex justify-between items-center mb-4">
-                                    <label className="flex items-center">
-                                        <input type="checkbox" className="mr-2" />
-                                        <p className='text-custom-darkgray lg:text-normal text-xs'>Remember me</p>
+                                    <label className="flex items-center hover:cursor-pointer">
+                                        <input type="checkbox" className="mr-2 hover:cursor-pointer" />
+                                        <p className='text-custom-darkgray lg:text-normal text-xs '>Remember me</p>
                                     </label>
-                                    <a href="#" className="text-custom-blueshade lg:text-normal text-xs">Forgot password?</a>
+                                    <a href="#" className="text-custom-blueshade lg:text-normal text-xs hover:text-custom-darkgray">Forgot password?</a>
                                 </div>
                             )}
 
-                            <button type="submit" className="w-full bg-custom-blueshade rounded-3xl text-white py-2">
+                            <button type="submit" className="w-full bg-custom-blueshade rounded-3xl text-white py-2 hover:brightness-90">
                                 {isSignUp ? 'Sign Up' : 'Continue'}
                             </button>
                         </form>
