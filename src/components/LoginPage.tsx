@@ -6,10 +6,51 @@ import AppIcon from '@/assets/AppIcon.png';
 import EmailIcon from '@/assets/email_icon.svg';
 import UsernameIcon from '@/assets/username_icon.svg';
 import PasswordIcon from '@/assets/password_icon.svg';
-// import GoogleIcon from '@/assets/google-icon.png'; //we will use this later
 
 const LoginPage: React.FC = () => {
-    const [isSignUp, setIsSignUp] = useState(false);
+    const [isSignUp, setIsSignUp] = useState<boolean>(false);
+    const [email, setEmail] = useState<string>('');
+    const [username, setUsername] = useState<string>('');
+    const [password, setPassword] = useState<string>('');
+
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+    
+        const url = isSignUp
+            ? 'http://localhost/project/ExpenseManager2/phpscripts/signup.php'
+            : 'http://localhost/project/ExpenseManager2/phpscripts/signin.php';
+    
+        const body = isSignUp
+            ? JSON.stringify({ email, username, password })
+            : JSON.stringify({ username, password });
+    
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ email, username, password }),
+                });
+            
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+            
+                const data = await response.json(); // This line will throw if the response is not valid JSON
+                console.log(data);
+            
+                if (data.success) {
+                    alert(`${isSignUp ? 'Sign Up' : 'Sign In'} successful ${isSignUp ? `with email: ${data.email}` : `by ${data.username}`}`);
+                } else {
+                    alert(`${isSignUp ? 'Sign Up' : 'Sign In'} failed: ${data.message}`);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred. Please try again.');
+            }
+    };
+    
 
     return (
         <div className="relative h-screen">
@@ -43,13 +84,15 @@ const LoginPage: React.FC = () => {
                             </button>
                         </div>
 
-                        <form>
+                        <form onSubmit={handleSubmit}>
                             {isSignUp && (
                                 <div className="mb-4 relative">
                                     <Image src={EmailIcon} alt="Email Icon" className="absolute left-3 top-2.5 w-5 h-5 icon-filter-gray" />
                                     <input
                                         type="email"
                                         placeholder="Email"
+                                        value={email}
+                                        onChange={(e) => setEmail(e.target.value)}
                                         className="w-full py-2 pl-10 pr-4 bg-custom-lightgray text-custom-darkgray font-semibold border border-gray-300 rounded-3xl"
                                     />
                                 </div>
@@ -59,6 +102,8 @@ const LoginPage: React.FC = () => {
                                 <input
                                     type="text"
                                     placeholder="Username"
+                                    value={username}
+                                    onChange={(e) => setUsername(e.target.value)}
                                     className="w-full py-2 pl-10 pr-4 bg-custom-lightgray text-custom-darkgray font-semibold border border-gray-300 rounded-3xl"
                                 />
                             </div>
@@ -67,6 +112,8 @@ const LoginPage: React.FC = () => {
                                 <input
                                     type="password"
                                     placeholder="Password"
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
                                     className="w-full py-2 pl-10 pr-4 bg-custom-lightgray text-custom-darkgray font-semibold border border-gray-300 rounded-3xl"
                                 />
                             </div>
@@ -86,7 +133,7 @@ const LoginPage: React.FC = () => {
                                 </div>
                             )}
 
-                            <button className="w-full bg-custom-blueshade rounded-3xl text-white py-2">
+                            <button type="submit" className="w-full bg-custom-blueshade rounded-3xl text-white py-2">
                                 {isSignUp ? 'Sign Up' : 'Continue'}
                             </button>
                         </form>
