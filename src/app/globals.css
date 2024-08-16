@@ -30,3 +30,9 @@
 .button-linear-gradient{
   background: linear-gradient(180deg, rgba(42, 161, 226, 0.00) 0%, rgba(42, 161, 226, 0.75) 14.58%);
 }
+.icon-filter-green {
+  filter: invert(87%) sepia(17%) saturate(335%) hue-rotate(62deg) brightness(103%) contrast(95%);
+}
+.icon-filter-blue {
+  filter: invert(68%) sepia(40%) saturate(5246%) hue-rotate(163deg) brightness(103%) contrast(94%);
+}

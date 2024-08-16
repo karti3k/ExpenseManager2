@@ -23,6 +23,7 @@ const config: Config = {
         'custom-lightgray' : '#d9d9d9',
         'custom-red': '#E43540',
         'custom-green': '#008000',
+        'custom-light-green': '#B7FFB7',
       },
       textShadow: {
         'stroke': '8px 8px 0 #32B7FF, -8px -8px 0 #32B7FF, 8px -8px 0 #32B7FF, -8px 8px 0 #32B7FF',
