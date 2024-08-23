@@ -66,7 +66,7 @@ interface LoginPageProps {
     
 
     return (
-        <div className="relative h-screen">
+        <div className="relative h-screen font-poppins">
             <Image src={LoginBgImg} alt="Login Image" layout="fill" className="object-cover" />
 
             <div className="absolute inset-0 flex">
