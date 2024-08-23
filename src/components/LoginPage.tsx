@@ -1,4 +1,6 @@
+'use client';
 import React, { useState } from 'react';
+import { useRouter } from 'next/navigation'
 import Image from 'next/image';
 import LoginBgImg from '@/assets/LoginBgImg.png';
 import LoginPageImg from '@/assets/LoginPageImg.png';
@@ -6,47 +8,62 @@ import AppIcon from '@/assets/AppIcon.png';
 import EmailIcon from '@/assets/email_icon.svg';
 import UsernameIcon from '@/assets/username_icon.svg';
 import PasswordIcon from '@/assets/password_icon.svg';
-import { useRouter } from 'next/navigation';
 
 interface LoginPageProps {
-    onLogin: () => void;
+    onLoginSuccess: () => void;  // Add a prop for handling successful login
   }
 
-const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
-    const [isSignUp, setIsSignUp] = useState(false);
-    const [email, setEmail] = useState('');
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
-    const router = useRouter();
+  const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
+    const [isSignUp, setIsSignUp] = useState<boolean>(false);
+    const [email, setEmail] = useState<string>('');
+    const [username, setUsername] = useState<string>('');
+    const [password, setPassword] = useState<string>('');
 
-    const handleSubmit = async (event: React.FormEvent) => {
+    const router = useRouter()
+    
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
+    
+        const url = isSignUp
+            ? 'http://localhost/project/ExpenseManager2/phpscripts/signup.php'
+            : 'http://localhost/project/ExpenseManager2/phpscripts/signin.php';
 
-        const url = isSignUp ? 'http://localhost/my_project/signup.php' : 'http://localhost/my_project/signin.php';
+        // const url = isSignUp
+        //     ? 'http://expmanager.free.nf/signup.php'
+        //     : 'http://expmanager.free.nf/signin.php';
+    
         const body = isSignUp
             ? JSON.stringify({ email, username, password })
             : JSON.stringify({ username, password });
-
-        const response = await fetch(url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body,
-        });
-
-        const data = await response.json();
-        console.log(data);
-
-        if (data.success) {
-            // Handle successful signup/signin
-            alert(`User ${isSignUp ? 'signed up' : 'signed in'} with ${isSignUp ? `email: ${data.email}` : `username: ${data.username}`}`);
-            router.push('/MainPage');
-        } else {
-            // Handle error
-            alert(`Signup/Signin failed: ${data.message}`);
-        }
+    
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ email, username, password }),
+                });
+            
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+            
+                const data = await response.json(); // This line will throw if the response is not valid JSON
+                console.log(data);
+            
+                if (data.success) {
+                    alert(`${isSignUp ? 'Sign Up' : 'Sign In'} successful ${isSignUp ? `with email: ${data.email}` : `by ${data.username}`}`);
+                    onLoginSuccess(); 
+                } else {
+                    alert(`${isSignUp ? 'Sign Up' : 'Sign In'} failed: ${data.message}`);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred. Please try again.');
+            }
     };
+    
 
     return (
         <div className="relative h-screen">
