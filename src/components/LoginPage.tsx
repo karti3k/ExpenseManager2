@@ -1,6 +1,5 @@
 'use client';
 import React, { useState } from 'react';
-import { useRouter } from 'next/navigation'
 import Image from 'next/image';
 import LoginBgImg from '@/assets/LoginBgImg.png';
 import LoginPageImg from '@/assets/LoginPageImg.png';
@@ -18,8 +17,6 @@ interface LoginPageProps {
     const [email, setEmail] = useState<string>('');
     const [username, setUsername] = useState<string>('');
     const [password, setPassword] = useState<string>('');
-
-    const router = useRouter()
     
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
