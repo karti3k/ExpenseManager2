@@ -6,9 +6,11 @@ import Image from 'next/image';
 
 interface DetailsEntryModalProps {
   onClose: () => void;
+  onTransactionAdded: () => void;  // New prop to notify parent about a new transaction
+  username: string | null; // Add username prop
 }
 
-const DetailsEntryModal: React.FC<DetailsEntryModalProps> = ({ onClose }) => {
+const DetailsEntryModal: React.FC<DetailsEntryModalProps> = ({ onClose, onTransactionAdded, username }) => {
   const [amount, setAmount] = useState('');
   const [date, setDate] = useState('');
   const [details, setDetails] = useState('');
@@ -42,6 +44,44 @@ const DetailsEntryModal: React.FC<DetailsEntryModalProps> = ({ onClose }) => {
       document.removeEventListener('click', handleOutsideClick);
     };
   }, []);
+
+  // Function to handle adding transaction
+  const handleAddTransaction = async () => {
+    if (!username) {
+      alert('Username is required');
+      return;
+    }
+    
+    const transaction = {
+      amount,
+      date,
+      details,
+      username // Add username to transaction
+    };
+
+    try {
+      const response = await fetch('http://localhost/project/ExpenseManager2/phpscripts/transactions.php', { // Update URL with your server domain
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(transaction),
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        alert('Transaction added successfully');
+        onTransactionAdded();  // Notify parent component to refresh transactions
+        handleClose();  // Close the modal after a successful transaction
+      } else {
+        alert(result.message || 'Failed to add transaction');
+      }
+    } catch (error) {
+      console.error('Error adding transaction:', error);
+      alert('Error adding transaction');
+    }
+  };
 
   return (
     <>
@@ -84,24 +124,34 @@ const DetailsEntryModal: React.FC<DetailsEntryModalProps> = ({ onClose }) => {
           </div>
 
           <div className="flex justify-around">
-  <div className="relative inline-block group">
-    <button className="icon-filter-dark-bluish rounded-md shadow">
-      <Image src={AddCategoryicon} alt="add category" width={30} height={30} />
-    </button>
-    <span className="absolute right-[0.4px] transform -translate-x-1/2 mt-1 text-gray-700 text-xs bg-white px-1 py-1 rounded-md shadow-lg opacity-0 group-hover:opacity-80 transition-opacity duration-200">
-      Add Category
-    </span>
-  </div>
+            <div className="relative inline-block group">
+              <button className="icon-filter-dark-bluish rounded-md shadow">
+                <Image src={AddCategoryicon} alt="add category" width={30} height={30} />
+              </button>
+              <span className="absolute right-[0.4px] transform -translate-x-1/2 mt-1 text-gray-700 text-xs bg-white px-1 py-1 rounded-md shadow-lg opacity-0 group-hover:opacity-80 transition-opacity duration-200">
+                Add Category
+              </span>
+            </div>
 
-  <div className="relative inline-block group">
-    <button className="icon-filter-dark-bluish rounded-md shadow">
-      <Image src={AddImagesIcon} alt="add images" width={30} height={30} />
-    </button>
-    <span className="absolute transform translate-x-[4.8px] mt-1 text-gray-700 text-xs bg-white px-2 py-1 rounded-md shadow-lg opacity-0 text-right group-hover:opacity-100 transition-opacity duration-200">
-      Add Images
-    </span>
-  </div>
-</div>
+            <div className="relative inline-block group">
+              <button className="icon-filter-dark-bluish rounded-md shadow">
+                <Image src={AddImagesIcon} alt="add images" width={30} height={30} />
+              </button>
+              <span className="absolute transform translate-x-[4.8px] mt-1 text-gray-700 text-xs bg-white px-2 py-1 rounded-md shadow-lg opacity-0 text-right group-hover:opacity-100 transition-opacity duration-200">
+                Add Images
+              </span>
+            </div>
+          </div>
+
+          {/* Add Transaction Button */}
+          <div className="mt-4 flex justify-center">
+            <button
+              onClick={handleAddTransaction}
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+            >
+              Add Transaction
+            </button>
+          </div>
         </div>
       </div>
     </>

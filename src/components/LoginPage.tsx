@@ -9,63 +9,57 @@ import UsernameIcon from '@/assets/username_icon.svg';
 import PasswordIcon from '@/assets/password_icon.svg';
 
 interface LoginPageProps {
-    onLoginSuccess: () => void;  // Add a prop for handling successful login
-  }
+    onLoginSuccess: (username: string) => void;  // Updated to accept username
+}
 
-  const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
+const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
     const [isSignUp, setIsSignUp] = useState<boolean>(false);
     const [email, setEmail] = useState<string>('');
     const [username, setUsername] = useState<string>('');
     const [password, setPassword] = useState<string>('');
-    
+
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-    
+
         const url = isSignUp
             ? 'http://localhost/project/ExpenseManager2/phpscripts/signup.php'
             : 'http://localhost/project/ExpenseManager2/phpscripts/signin.php';
 
-        // const url = isSignUp
-        //     ? 'http://expmanager.free.nf/signup.php'
-        //     : 'http://expmanager.free.nf/signin.php';
-    
         const body = isSignUp
             ? JSON.stringify({ email, username, password })
             : JSON.stringify({ username, password });
-    
-            try {
-                const response = await fetch(url, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ email, username, password }),
-                });
-            
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-            
-                const data = await response.json(); // This line will throw if the response is not valid JSON
-                console.log(data);
-            
-                if (data.success) {
-                    alert(`${isSignUp ? 'Sign Up' : 'Sign In'} successful ${isSignUp ? `with email: ${data.email}` : `by ${data.username}`}`);
-                    onLoginSuccess(); 
-                } else {
-                    alert(`${isSignUp ? 'Sign Up' : 'Sign In'} failed: ${data.message}`);
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                alert('An error occurred. Please try again.');
+
+        try {
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: body,
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
             }
+
+            const data = await response.json();
+            console.log(data);
+
+            if (data.success) {
+                alert(`${isSignUp ? 'Sign Up' : 'Sign In'} successful ${isSignUp ? `with email: ${data.email}` : `by ${data.username}`}`);
+                onLoginSuccess(data.username);  // Pass username to onLoginSuccess
+            } else {
+                alert(`${isSignUp ? 'Sign Up' : 'Sign In'} failed: ${data.message}`);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('An error occurred. Please try again.');
+        }
     };
-    
 
     return (
         <div className="relative h-screen font-poppins">
             <Image src={LoginBgImg} alt="Login Image" layout="fill" className="object-cover" />
-
             <div className="absolute inset-0 flex">
                 <div className="hidden lg:flex lg:w-1/2 h-full bg-black bg-opacity-90 p-8 shadow-lg">
                     <div className='w-full px-8 flex flex-col items-center justify-evenly'>
@@ -93,7 +87,6 @@ interface LoginPageProps {
                                 Sign Up
                             </button>
                         </div>
-
                         <form onSubmit={handleSubmit}>
                             {isSignUp && (
                                 <div className="mb-4 relative">
@@ -127,10 +120,8 @@ interface LoginPageProps {
                                     className="w-full py-2 pl-10 pr-4 bg-custom-lightgray text-custom-darkgray font-semibold border border-gray-300 rounded-3xl"
                                 />
                             </div>
-
                             {isSignUp ? (
                                 <div className="mb-4">
-                                    {/* Add password strength checker logic here */}
                                     <p className='text-custom-darkgray text-xs'>Password Strength: {/* Logic for password strength */}</p>
                                 </div>
                             ) : (
@@ -142,7 +133,6 @@ interface LoginPageProps {
                                     <a href="#" className="text-custom-blueshade lg:text-normal text-xs hover:text-custom-darkgray">Forgot password?</a>
                                 </div>
                             )}
-
                             <button type="submit" className="w-full bg-custom-blueshade rounded-3xl text-white py-2 hover:brightness-90">
                                 {isSignUp ? 'Sign Up' : 'Continue'}
                             </button>
