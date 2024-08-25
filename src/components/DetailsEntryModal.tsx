@@ -5,8 +5,8 @@ import CloseIcon from '@/assets/CloseIcon.svg';
 import Image from 'next/image';
 import FoodIcon from '@/assets/Food.svg';
 import EntertainmentIcon from '@/assets/Entertainment.svg';
-import CashbackIcon from '@/assets/Cashback.svg';
-import ShoppingIcon from '@/assets/Shopping.svg';
+import CashbackIcon from '@/assets/Cashback.png';
+import ShoppingIcon from '@/assets/Shopping.png';
 
 // Define the Category type
 type Category = 'Food' | 'Entertainment' | 'Cashback' | 'Shopping';
@@ -68,7 +68,7 @@ const DetailsEntryModal: React.FC<DetailsEntryModalProps> = ({ onClose, onAddExp
   };
 
   return (
-    <div className="w-1/2 fixed inset-0 flex justify-center items-center font-poppins">
+    <div className="w-1/2 inset-0 flex justify-center items-center font-poppins">
       <div
         ref={modalContainerRef}
         className="p-6 pb-4 pt-16 w-80 relative bg-[#d9d9d9]/40 rounded-lg shadow backdrop-blur-sm"
@@ -85,7 +85,7 @@ const DetailsEntryModal: React.FC<DetailsEntryModalProps> = ({ onClose, onAddExp
                 <li
                   key={category.name}
                   onClick={(e) => selectCategory(category.name as Category, e)} // Cast to Category
-                  className="cursor-pointer px-4 py-2 hover:bg-gray-100 flex items-center gap-2"
+                  className="cursor-pointer px-4 py-2 hover:bg-gray-100 flex items-center gap-2 border-2 border-b-custom-lightgray"
                 >
                   <Image src={category.icon} alt={`${category.name} icon`} width={20} height={20} />
                   {category.name}
@@ -101,7 +101,7 @@ const DetailsEntryModal: React.FC<DetailsEntryModalProps> = ({ onClose, onAddExp
                 type="number"
                 value={amount}
                 onChange={handleAmountChange}
-                className="w-full px-3 py-2 border rounded-lg text-gray-400 shadow"
+                className="bg-white w-full px-3 py-2 border rounded-lg text-gray-700 shadow"
                 placeholder="Enter amount in RS"
               />
             </div>
@@ -112,7 +112,7 @@ const DetailsEntryModal: React.FC<DetailsEntryModalProps> = ({ onClose, onAddExp
                 type="date"
                 value={date}
                 onChange={handleDateChange}
-                className="bg-[#f0f9cd] w-full px-3 py-2 border rounded-lg text-gray-400 shadow"
+                className="bg-white w-full px-3 py-2 border rounded-lg text-gray-400 shadow"
               />
             </div>
 
@@ -121,7 +121,7 @@ const DetailsEntryModal: React.FC<DetailsEntryModalProps> = ({ onClose, onAddExp
               <textarea
                 value={details}
                 onChange={handleDetailsChange}
-                className="bg-[#cdd4f9] w-full h-10 px-3 pt-1 border rounded-lg resize-none text-gray-400 shadow"
+                className="bg-white w-full h-10 px-3 pt-1 border rounded-lg resize-none text-gray-700 shadow"
                 maxLength={20}
                 placeholder="Enter more details (optional)"
               />
@@ -129,45 +129,42 @@ const DetailsEntryModal: React.FC<DetailsEntryModalProps> = ({ onClose, onAddExp
           </>
         )}
 
-        <div className="flex justify-around relative">
+        <div className="flex gap-20 justify-center relative">
           {selectedCategory ? (
             <div className="relative inline-block group">
               <button
                 onClick={toggleCategoryMenu}
-                className="text-sm text-gray-700 font-semibold px-4 py-2 border rounded-lg shadow cursor-pointer"
+                className="text-sm text-white font-semibold px-4 py-2 border rounded-lg shadow cursor-pointer bg-custom-darkgray"
               >
                 {selectedCategory}
               </button>
-              <span className="absolute right-[0.4px] transform -translate-x-1/2 mt-1 text-gray-700 text-xs bg-white px-1 py-1 rounded-md shadow-lg opacity-0 group-hover:opacity-80 transition-opacity duration-200">
-                Change Category
-              </span>
             </div>
           ) : (
             <div className="relative inline-block group">
               <button
                 onClick={toggleCategoryMenu}
-                className="icon-filter-dark-bluish rounded-md shadow"
+                className="icon-filter-gray rounded-md"
               >
                 <Image src={AddCategoryicon} alt="add category" width={30} height={30} />
               </button>
-              <span className="absolute right-[0.4px] transform -translate-x-1/2 mt-1 text-gray-700 text-xs bg-white px-1 py-1 rounded-md shadow-lg opacity-0 group-hover:opacity-80 transition-opacity duration-200">
+              <span className="absolute right-[0.4px] transform -translate-x-1/2 mt-1 text-gray-700 text-xs bg-white px-1 py-1 rounded-md shadow-lg opacity-0 group-hover:opacity-80 transition-opacity duration-200 text-right">
                 Add Category
               </span>
             </div>
           )}
 
           <div className="relative inline-block group">
-            <button className="icon-filter-dark-bluish rounded-md shadow">
+            <button className="icon-filter-gray rounded-md shadow">
               <Image src={AddImagesIcon} alt="add images" width={30} height={30} />
             </button>
-            <span className="absolute transform translate-x-[4.8px] mt-1 text-gray-700 text-xs bg-white px-2 py-1 rounded-md shadow-lg opacity-0 text-right group-hover:opacity-100 transition-opacity duration-200">
+            <span className="absolute transform translate-x-[4.8px] mt-1 text-gray-700 text-xs bg-white px-1 py-1 rounded-md shadow-lg opacity-0 text-left group-hover:opacity-100 transition-opacity duration-200">
               Add Images
             </span>
           </div>
         </div>
 
         <button 
-          className="mt-4 w-full bg-blue-500 text-white py-2 rounded-lg shadow"
+          className="hover:brightness-110 mt-4 w-full border-t border-custom-sky-blue button-linear-gradient rounded-xl py-2 drop-shadow-2xl button-inner-shadow font-poppins text-white text-lg"
           onClick={handleSubmit}
         >
           Add Expense

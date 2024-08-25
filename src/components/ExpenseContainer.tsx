@@ -6,8 +6,8 @@ import PlusIcon from '@/assets/plus.svg';
 import DetailsEntryModal from './DetailsEntryModal';
 import FoodIcon from '@/assets/Food.svg';
 import EntertainmentIcon from '@/assets/Entertainment.svg';
-import CashbackIcon from '@/assets/Cashback.svg';
-import ShoppingIcon from '@/assets/Shopping.svg';
+import CashbackIcon from '@/assets/Cashback.png';
+import ShoppingIcon from '@/assets/Shopping.png';
 import ClockIcon from '@/assets/Clock.svg';
 import DeleteIcon from '@/assets/Delete_Historyicon.svg';
 import MoneyInIcon from '@/assets/MoneyIn.svg';
@@ -20,6 +20,13 @@ const categoryIcons: Record<Category, any> = {
   Entertainment: EntertainmentIcon,
   Cashback: CashbackIcon,
   Shopping: ShoppingIcon,
+};
+
+const categoryStyles: Record<Category, string> = {
+  Food: 'bg-[#E2DBFF] border-4 border-[#ee82ee59]',
+Entertainment: 'bg-[#FFE4DB] border-4 border-[#e4893559]',
+Cashback: 'bg-[#DCFACE] border-4 border-[#44d24459]',
+Shopping: 'bg-[#FFF5DB] border-4 border-[#d2cd4459]',
 };
 
 const ExpenseContainer = () => {
@@ -73,14 +80,14 @@ const ExpenseContainer = () => {
 
   return (
     <div className='font-poppins w-full h-screen bg-[#E9F7FF] px-28 flex flex-col justify-end'>
-      <div className='bg-white w-full h-[68%] rounded-3xl shadow-inner-custom flex flex-col justify-between'>
+      <div className='bg-white w-full h-[72%] rounded-3xl shadow-inner-custom flex flex-col justify-between'>
         <div className='p-6 overflow-y-auto'>
           {expenses.length === 0 ? (
-            <p className='text-center text-gray-500'>No expenses added yet.</p>
+            <p className='text-center text-gray-500 pt-40 opacity-40'>No expenses added yet!</p>
           ) : (
             sortedDates.map((date) => (
               <div key={date}>
-                <h2 className='text-lg font-semibold'>{date}</h2>
+                <h2 className='text-lg font-semibold text-custom-darkgray'>{date}</h2>
                 <ul className='mb-4'>
                   {groupedExpenses[date]
                     .sort((a, b) => {
@@ -93,11 +100,12 @@ const ExpenseContainer = () => {
                       const isCashback = expense.category === 'Cashback';
                       const amountClass = isCashback ? 'text-green-500' : 'text-red-500';
                       const amountIcon = isCashback ? MoneyInIcon : MoneyOutIcon;
+                      const listItemStyle = categoryStyles[expense.category];
 
                       return (
-                        <li key={index} className='flex justify-between border-b py-2'>
+                        <li key={index} className={`mt-2 flex justify-between items-center py-1 rounded-full px-2 ${listItemStyle}`}>
                           <div className='flex items-center'>
-                            <Image src={icon} alt={`${expense.category} icon`} width={30} height={30} className='mr-2' />
+                            <Image src={icon} alt={`${expense.category} icon`} width={28} height={28} className='mr-2' />
                             <p className='w-60'>{expense.category}</p>
                             <p className='w-80'><strong>Details:</strong> {expense.details}</p>
                             <div className='flex gap-2'><Image src={ClockIcon} width={17} height={17} alt='clock'></Image><p className='w-60'>{expense.time}</p></div>
@@ -120,16 +128,15 @@ const ExpenseContainer = () => {
             <Image src={ExpensesBttnIcon} alt='E-icon' width={35} height={35}></Image> Expenses
           </button>
 
-          <button className='hover:bg-custom-blueshade opacity-80 mb-4 z-10 absolute mx-auto w-12 h-12 rounded-full drop-shadow-xl flex justify-center items-center' onClick={toggleModal}>
-            <Image src={PlusIcon} alt='Plus-icon' width={30} height={30} />
+          <button className='bg-white font-bold text-2xl text-[#2AA1E2] mb-4 z-10 absolute mx-auto w-12 h-12 border-4 hover:border-custom-light-green rounded-full drop-shadow-xl flex justify-center items-center' onClick={toggleModal}>+
           </button>
 
           <button className='hover:brightness-110 flex gap-2 justify-center items-center w-1/2 h-12 border-t border-custom-sky-blue button-linear-gradient rounded-r-xl drop-shadow-2xl button-inner-shadow font-poppins text-white text-lg'>
-            <Image src={GraphBttnIcon} alt='G-icon' width={35} height={35}></Image> Graph
+            <Image src={GraphBttnIcon} alt='G-icon' width={25} height={25}></Image> Graph
           </button>
         </div>
       </div>
-      {isModalOpen && <DetailsEntryModal onClose={toggleModal} onAddExpense={handleAddExpense} />}
+      {isModalOpen && ( <div className='flex justify-center items-end absolute  w-full h-screen right-[0%] pb-14'><DetailsEntryModal onClose={toggleModal} onAddExpense={handleAddExpense} /></div>)}
     </div>
   );
 };
