@@ -1,14 +1,20 @@
-import React from 'react'
-import TopBar from './TopBar'
-import ExpenseContainer from './ExpenseContainer'
+'use client';
 
-const MainPage = () => {
-  return (
-    <div>
-        <TopBar />
-        <ExpenseContainer />
-    </div>
-  )
+import React from 'react';
+import ExpenseContainer from './ExpenseContainer';
+import TopBar from './TopBar';
+
+interface MainPageProps {
+  username: string | null;
 }
 
-export default MainPage
+const MainPage: React.FC<MainPageProps> = ({ username }) => {
+  return (
+    <div>
+      <TopBar username={username}/>
+      <ExpenseContainer username={username}/>
+    </div>
+  );
+};
+
+export default MainPage;

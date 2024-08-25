@@ -1,3 +1,4 @@
+'use client';
 import React, { useState } from 'react';
 import Image from 'next/image';
 import LoginBgImg from '@/assets/LoginBgImg.png';
@@ -6,18 +7,16 @@ import AppIcon from '@/assets/AppIcon.png';
 import EmailIcon from '@/assets/email_icon.svg';
 import UsernameIcon from '@/assets/username_icon.svg';
 import PasswordIcon from '@/assets/password_icon.svg';
-import { useRouter } from 'next/navigation';
 
 interface LoginPageProps {
-    onLogin: () => void;
-  }
+    onLoginSuccess: (username: string) => void;  // Updated to accept username
+}
 
-const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
+const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
     const [isSignUp, setIsSignUp] = useState(false);
     const [email, setEmail] = useState('');
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const router = useRouter();
 
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
@@ -41,7 +40,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
         if (data.success) {
             // Handle successful signup/signin
             alert(`User ${isSignUp ? 'signed up' : 'signed in'} with ${isSignUp ? `email: ${data.email}` : `username: ${data.username}`}`);
-            router.push('/MainPage');
+            onLoginSuccess(data.username);
         } else {
             // Handle error
             alert(`Signup/Signin failed: ${data.message}`);

@@ -29,9 +29,20 @@ Cashback: 'bg-[#DCFACE] border-4 border-[#44d24459]',
 Shopping: 'bg-[#FFF5DB] border-4 border-[#d2cd4459]',
 };
 
-const ExpenseContainer = () => {
+interface Transaction {
+  amount: number;
+  date: string;
+  details: string;
+}
+
+interface ExpenseContainerProps {
+  username: string | null;
+}
+
+const ExpenseContainer: React.FC<ExpenseContainerProps> = ({ username }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [expenses, setExpenses] = useState<{ amount: string; date: string; details: string; category: Category; time: string }[]>([]);
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
 
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);

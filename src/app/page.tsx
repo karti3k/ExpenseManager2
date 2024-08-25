@@ -3,18 +3,21 @@
 import React, { useState } from 'react';
 import LoginPage from "@/components/LoginPage";
 import MainPage from "@/components/MainPage";
-import Image from "next/image";
 
 export default function Home() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const handleLogin = () => {
+  const [username, setUsername] = useState<string | null>(null);
+
+  // Function to set the login state and username
+  const handleLogin = (username: string) => {
     setIsLoggedIn(true);
+    setUsername(username);
   };
 
   return (
     <main className='bg-white'>
-      {/* {isLoggedIn ? <MainPage /> : <LoginPage onLogin={handleLogin} />} */}
-      <MainPage />
+      {/* Conditionally render LoginPage or MainPage based on login state */}
+      {isLoggedIn ? <MainPage username={username} /> : <LoginPage onLoginSuccess={handleLogin} />}
     </main>
   );
 }
