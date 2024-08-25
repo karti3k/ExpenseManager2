@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import ExpensesBttnIcon from '@/assets/expenses-bttn-icon.svg';
 import GraphBttnIcon from '@/assets/graph_bttn-icon.svg';
@@ -33,6 +33,7 @@ interface Transaction {
   amount: number;
   date: string;
   details: string;
+  time: string;
 }
 
 interface ExpenseContainerProps {
@@ -42,16 +43,70 @@ interface ExpenseContainerProps {
 const ExpenseContainer: React.FC<ExpenseContainerProps> = ({ username }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [expenses, setExpenses] = useState<{ amount: string; date: string; details: string; category: Category; time: string }[]>([]);
-  const [transactions, setTransactions] = useState<Transaction[]>([]);
 
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
   };
 
-  const handleAddExpense = (expense: { amount: string; date: string; details: string; category: Category }) => {
-    const currentTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-    setExpenses([{ ...expense, time: currentTime }, ...expenses]);
+  //Changes
+  useEffect(() => {
+    fetchTransactions(); // Fetch transactions when the component mounts
+  }, [username]); // Depend on username
+
+  // Fetch transactions from the backend
+  const fetchTransactions = async () => {
+    if (!username) return; // Do not fetch if username is not available
+
+    try {
+      const response = await fetch(`http://localhost/project/ExpenseManager2/phpscripts/transactions.php?username=${username}`);
+      const result = await response.json();
+
+      if (result.success) {
+        setExpenses(result.data);  // This should be an array of transactions
+      } else {
+        alert('Failed to fetch transactions');
+        console.error('Failed to fetch transactions:', result);
+      }
+    } catch (error) {
+      alert('Error fetching transactions');
+      console.error('Error fetching transactions:', error);
+    }
   };
+
+  const handleAddExpense = async (expense: { amount: string; date: string; details: string; category: Category }) => {
+    const currentTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  const transaction = {
+    amount: expense.amount,
+    date: expense.date,
+    details: expense.details,
+    category: expense.category,
+    time: currentTime,
+    username, // Include the username in the transaction object
+  };
+
+  try {
+    const response = await fetch('http://localhost/project/ExpenseManager2/phpscripts/transactions.php', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(transaction),
+    });
+
+    const result = await response.json();
+
+    if (result.success) {
+      alert('Transaction added successfully');
+      fetchTransactions();  // Refresh the list of transactions after a successful addition
+      toggleModal();  // Close the modal after a successful transaction
+    } else {
+      alert(result.message || 'Failed to add transaction');
+    }
+  } catch (error) {
+    console.error('Error adding transaction:', error);
+    alert('Error adding transaction');
+  }
+};
 
   const handleDeleteExpense = (index: number) => {
     const confirmed = window.confirm('Are you sure you want to delete this transaction?');

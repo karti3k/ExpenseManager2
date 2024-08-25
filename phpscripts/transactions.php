@@ -31,15 +31,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($postData && isset($postData['username'])) {
         $username = $postData['username']; // Use username from POST data
         $amount = $postData['amount'];
-        $dateTime = date('Y-m-d H:i:s'); // Current date and time
+        $date = $postData['date']; // Date coming from React component
+        $time = $postData['time']; // Time coming from React component
         $details = $postData['details'];
+        $category = $postData['category']; // Add category handling
 
         // Create transaction data array
         $transactionData = [
             'username' => $username,
             'amount' => $amount,
-            'dateTime' => $dateTime,
-            'details' => $details
+            'date' => $date, // Storing the date separately
+            'time' => $time, // Storing the time separately
+            'details' => $details,
+            'category' => $category // Add category to the data
         ];
 
         // Add the transaction to the Firebase database
@@ -63,8 +67,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             foreach ($transactions as $transaction) {
                 $transactionArray[] = [
                     'amount' => (int)$transaction['amount'],
-                    'date' => $transaction['dateTime'],
-                    'details' => $transaction['details']
+                    'date' => $transaction['date'], // Date in a separate field
+                    'time' => $transaction['time'], // Time in a separate field
+                    'details' => $transaction['details'],
+                    'category' => $transaction['category'] // Add category to the response
                 ];
             }
             echo json_encode(['success' => true, 'data' => $transactionArray]);
