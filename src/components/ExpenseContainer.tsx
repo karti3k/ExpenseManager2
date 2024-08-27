@@ -29,20 +29,14 @@ Cashback: 'bg-[#DCFACE] border-4 border-[#44d24459]',
 Shopping: 'bg-[#FFF5DB] border-4 border-[#d2cd4459]',
 };
 
-interface Transaction {
-  amount: number;
-  date: string;
-  details: string;
-  time: string;
-}
-
 interface ExpenseContainerProps {
   username: string | null;
+  onTransactionSuccess: () => void; // Add callback prop
 }
 
-const ExpenseContainer: React.FC<ExpenseContainerProps> = ({ username }) => {
+const ExpenseContainer: React.FC<ExpenseContainerProps> = ({ username, onTransactionSuccess }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [expenses, setExpenses] = useState<{ amount: string; date: string; details: string; category: Category; time: string }[]>([]);
+  const [expenses, setExpenses] = useState<{ amount: number; date: string; details: string; category: Category; time: string }[]>([]);
 
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
@@ -64,8 +58,9 @@ const ExpenseContainer: React.FC<ExpenseContainerProps> = ({ username }) => {
       if (result.success) {
         setExpenses(result.data);  // This should be an array of transactions
       } else {
-        alert('Failed to fetch transactions');
-        console.error('Failed to fetch transactions:', result);
+        //alert('Failed to fetch transactions');
+        //console.error('Failed to fetch transactions:', result);
+        console.log("message: ",result.message);
       }
     } catch (error) {
       alert('Error fetching transactions');
@@ -73,7 +68,7 @@ const ExpenseContainer: React.FC<ExpenseContainerProps> = ({ username }) => {
     }
   };
 
-  const handleAddExpense = async (expense: { amount: string; date: string; details: string; category: Category }) => {
+  const handleAddExpense = async (expense: { amount: number; date: string; details: string; category: Category }) => {
     const currentTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   const transaction = {
     amount: expense.amount,
@@ -98,6 +93,7 @@ const ExpenseContainer: React.FC<ExpenseContainerProps> = ({ username }) => {
     if (result.success) {
       alert('Transaction added successfully');
       fetchTransactions();  // Refresh the list of transactions after a successful addition
+      onTransactionSuccess(); // Notify the MainPage that a transaction was added
       toggleModal();  // Close the modal after a successful transaction
     } else {
       alert(result.message || 'Failed to add transaction');
@@ -108,12 +104,44 @@ const ExpenseContainer: React.FC<ExpenseContainerProps> = ({ username }) => {
   }
 };
 
-  const handleDeleteExpense = (index: number) => {
-    const confirmed = window.confirm('Are you sure you want to delete this transaction?');
-    if (confirmed) {
-      setExpenses(expenses.filter((_, i) => i !== index));
+
+const handleDeleteExpense = async (index: number) => {
+  const confirmed = window.confirm('Are you sure you want to delete this transaction?');
+  
+  if (confirmed) {
+    // Retrieve the expense details to delete
+    const expenseToDelete = expenses[index];
+
+    try {
+      const response = await fetch('http://localhost/project/ExpenseManager2/phpscripts/deletetransactions.php',{
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          amount: expenseToDelete.amount,
+          date: expenseToDelete.date,
+          time: expenseToDelete.time,
+          category: expenseToDelete.category,
+          username: username, // Assuming `username` is passed as a prop to the component
+        }),
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        alert('Transaction deleted successfully');
+        fetchTransactions();
+      } else {
+        alert(result.message || 'Failed to delete transaction');
+        console.error('Failed to delete transaction:', result);
+      }
+    } catch (error) {
+      console.error('Catched Error deleting transaction:', error);
+      alert('Catched Error deleting transaction');
     }
-  };
+  }
+};
 
   const formatDate = (date: string) => {
     const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
@@ -136,7 +164,7 @@ const ExpenseContainer: React.FC<ExpenseContainerProps> = ({ username }) => {
     }
     groups[formattedDate].push(expense);
     return groups;
-  }, {} as Record<string, { amount: string; date: string; details: string; category: Category; time: string }[]>);
+  }, {} as Record<string, { amount: number; date: string; details: string; category: Category; time: string }[]>);
 
   const sortedDates = Object.keys(groupedExpenses).sort((a, b) => {
     const dateA = new Date(groupedExpenses[a][0].date);
@@ -208,3 +236,5 @@ const ExpenseContainer: React.FC<ExpenseContainerProps> = ({ username }) => {
 };
 
 export default ExpenseContainer;
+
+

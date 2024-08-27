@@ -13,11 +13,11 @@ type Category = 'Food' | 'Entertainment' | 'Cashback' | 'Shopping';
 
 interface DetailsEntryModalProps {
   onClose: () => void;
-  onAddExpense: (expense: { amount: string; date: string; details: string; category: Category }) => void;
+  onAddExpense: (expense: { amount: number; date: string; details: string; category: Category }) => void;
 }
 
 const DetailsEntryModal: React.FC<DetailsEntryModalProps> = ({ onClose, onAddExpense }) => {
-  const [amount, setAmount] = useState('');
+  const [amount, setAmount] = useState<number>();
   const [date, setDate] = useState('');
   const [details, setDetails] = useState('');
   const [isCategoryMenuOpen, setIsCategoryMenuOpen] = useState(false);
@@ -32,8 +32,15 @@ const DetailsEntryModal: React.FC<DetailsEntryModalProps> = ({ onClose, onAddExp
   ];
 
   const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setAmount(e.target.value);
-  };
+    const value = e.target.value;
+    const parsedValue = parseInt(value, 10); // Convert the input value to an integer
+    
+    if (!isNaN(parsedValue)) {
+      setAmount(parsedValue); // Set the state with the parsed integer value
+    } else {
+      setAmount(0); // Optional: Set a default value if parsing fails
+    }
+  };  
 
   const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setDate(e.target.value);

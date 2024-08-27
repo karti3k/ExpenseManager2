@@ -1,19 +1,22 @@
-import React from 'react'
-import Image from 'next/image'
-import UsernameIcon from '@/assets/username_icon.svg'
-import HelpIcon from '@/assets/help_icon.svg'
-import DeleteHistoryIcon from '@/assets/Delete_Historyicon.svg'
-import AddCategoryicon from '@/assets/add_category_icon.svg'
-import DarkModeIcon from '@/assets/dar_mode_icon.svg'
-import AccountSelectIcon from '@/assets/AccountSelectIcon.svg'
-import Happyicon from '@/assets/happy_icon.svg'
-import LoadingGIF from '@/assets/loading.gif'
+import React from 'react';
+import Image from 'next/image';
+import UsernameIcon from '@/assets/username_icon.svg';
+import HelpIcon from '@/assets/help_icon.svg';
+import DeleteHistoryIcon from '@/assets/Delete_Historyicon.svg';
+import AddCategoryicon from '@/assets/add_category_icon.svg';
+import DarkModeIcon from '@/assets/dar_mode_icon.svg';
+import AccountSelectIcon from '@/assets/AccountSelectIcon.svg';
+import Happyicon from '@/assets/happy_icon.svg';
+import LoadingGIF from '@/assets/loading.gif';
+import SadEmoji from '@/assets/sad_emoji.svg'
 
 interface TopBarProps {
     username: string | null;
+    totalIncome: number | null;
+    totalExpense: number | null;
 }
 
-const TopBar: React.FC<TopBarProps> = ({ username }) => {
+const TopBar: React.FC<TopBarProps> = ({ username, totalIncome, totalExpense }) => {
     return (
         <header className='absolute z-10 w-full'>
             <nav className='w-full h-10 bg-custom-gradient text-white flex items-center justify-between px-14'>
@@ -30,20 +33,31 @@ const TopBar: React.FC<TopBarProps> = ({ username }) => {
             <div className='w-full h-20 bg-white rounded-b-xl drop-shadow-lg shadow-sm flex font-poppins'>
                 <div className='w-1/3 flex flex-col justify-center'>
                     <div className='flex justify-center text-custom-darkgray'>This Month <span className='pl-1 text-custom-red font-semibold'>Expense</span></div> 
-                    <div className='flex justify-center'>--</div>
+                    <div className='flex justify-center'>{totalExpense !== null ? `₹${totalExpense}` : '₹0'}</div>
                 </div>
                 <div className='w-1/3 flex flex-col justify-center gap-1 items-center border-x-2 border-slate-200'>
-                    <div className='flex justify-center'>
-                        <Image src={LoadingGIF} alt='happy-icon' width={100} height={50} className='opacity-0'></Image> 
-                    </div>
+                <div className='flex justify-center text-custom-darkgray'>
+  {(totalIncome !== null && totalExpense !== null) && (totalIncome - totalExpense < 0) ? (
+    <span className='text-[#BF3636] text-lg font-extralight text font-semibold flex flex-col justify-center items-center'>Budget deficit ! <Image src={SadEmoji} alt='sad-emoji' width={35} height={35}></Image> </span>
+  ) : (
+    <>
+      Current <span className='pl-1 text-[#d2cd44] font-semibold'>Savings</span>
+    </>
+  )}
+</div>
+<div className='flex justify-center'>
+  {(totalIncome !== null && totalExpense !== null) ? (
+    totalIncome - totalExpense < 0 ? '' : `₹${totalIncome - totalExpense}`
+  ) : '₹0'}
+</div>
                 </div>
                 <div className='w-1/3 flex flex-col justify-center'>
                     <div className='flex justify-center text-custom-darkgray'>This Month <span className='pl-1 text-custom-green font-semibold'>Income</span></div>
-                    <div className='flex justify-center'>--</div>
+                    <div className='flex justify-center'>{totalIncome !== null ? `₹${totalIncome}` : '₹0'}</div>
                 </div>
             </div>
         </header>
-    )
-}
+    );
+};
 
-export default TopBar
+export default TopBar;

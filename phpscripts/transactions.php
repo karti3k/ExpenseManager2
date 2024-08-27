@@ -20,6 +20,7 @@ include('dbconnect.php'); // Include the Firebase connection and functions
 
 // Define the reference table name
 $reference_table = 'transactions'; // Adjust this according to your Firebase structure
+$totals_table = 'totals';
 
 // Get username from query parameters (for GET requests)
 $username = isset($_GET['username']) ? $_GET['username'] : null;
@@ -46,11 +47,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'category' => $category // Add category to the data
         ];
 
+        // Determine if the transaction is income or expense based on category
+        $isIncome = in_array(strtolower($category), ['cashback', 'income']); // Check if category is Cashback or income
+
         // Add the transaction to the Firebase database
         $result = writeData($reference_table . '/' . $username, $transactionData);
 
         if ($result) {
             echo json_encode(['success' => true, 'message' => 'Transaction added successfully']);
+            if ($isIncome) {
+                $totalsData = ['Income' => $amount, 'Expense' => 0];
+                // Write the updated totals back to Firebase
+                $updateResult = writeData($totals_table . '/' . $username, $totalsData);
+            }
+            else{
+                $totalsData = ['Income' => 0, 'Expense' => $amount];
+                // Write the updated totals back to Firebase
+                $updateResult = writeData($totals_table . '/' . $username, $totalsData);
+            }
         } else {
             echo json_encode(['success' => false, 'message' => 'Failed to add transaction']);
         }
@@ -75,7 +89,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
             echo json_encode(['success' => true, 'data' => $transactionArray]);
         } else {
-            echo json_encode(['success' => false, 'message' => 'Failed to retrieve transactions']);
+            echo json_encode(['success' => false, 'message' => 'No Transactions are added yet']);
         }
     } else {
         echo json_encode(['success' => false, 'message' => 'Username is required']);
