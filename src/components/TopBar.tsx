@@ -22,11 +22,11 @@ const TopBar: React.FC<TopBarProps> = ({ username, totalIncome, totalExpense }) 
             <nav className='w-full h-10 bg-custom-gradient text-white flex items-center justify-between px-14'>
                 <h1 className='pb-2 drop-shadow-3xl text-3xl'>Expense Manager</h1>
                 <ul className='font-poppins text-md flex font-light'>
-                    <li className='flex gap-1 hover:cursor-pointer ml-8 drop-shadow-lg'><Image src={DarkModeIcon} alt='change theme:' width={16} height={16} className='icon-filter-white'></Image>Theme</li>
-                    <li className='flex gap-2 hover:cursor-pointer ml-8 drop-shadow-lg'><Image src={AddCategoryicon} alt='add category:' width={16} height={16} className='icon-filter-white'></Image>Categories</li>
+                    <li className='flex gap-1 hover:cursor-pointer ml-8 drop-shadow-lg'><Image src={DarkModeIcon} alt='change theme:' width={14} height={14} className='icon-filter-white'></Image>Theme</li>
+                    {/* <li className='flex gap-2 hover:cursor-pointer ml-8 drop-shadow-lg'><Image src={AddCategoryicon} alt='add category:' width={16} height={16} className='icon-filter-white'></Image>Categories</li>
                     <li className='flex gap-1 hover:cursor-pointer ml-8 drop-shadow-lg'><Image src={DeleteHistoryIcon} alt='deleted history:' width={16} height={16} className='icon-filter-white'></Image>Trash</li>
-                    <li className='flex gap-1 hover:cursor-pointer ml-6 drop-shadow-lg'><Image src={HelpIcon} alt='help:' width={24} height={24} className='icon-filter-white'></Image>Help</li>
-                    <li className='flex gap-1 hover:cursor-pointer ml-8 drop-shadow-lg'> <Image src={UsernameIcon} alt='username:' width={17} height={17} className='icon-filter-white'></Image>{username ? username : 'Guest'}<Image src={AccountSelectIcon} alt='username:' width={16} height={16} className='icon-filter-white'></Image></li>
+                    <li className='flex gap-1 hover:cursor-pointer ml-6 drop-shadow-lg'><Image src={HelpIcon} alt='help:' width={24} height={24} className='icon-filter-white'></Image>Help</li> */}
+                    <li className='flex gap-1 hover:cursor-pointer ml-8 drop-shadow-lg'> <Image src={UsernameIcon} alt='username:' width={17} height={17} className='icon-filter-white'></Image>{username ? username : 'Guest'}</li>
                 </ul>
             </nav>
 

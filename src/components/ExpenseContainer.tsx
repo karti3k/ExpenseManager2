@@ -52,7 +52,8 @@ const ExpenseContainer: React.FC<ExpenseContainerProps> = ({ username, onTransac
     if (!username) return; // Do not fetch if username is not available
 
     try {
-      const response = await fetch(`http://localhost/project/ExpenseManager2/phpscripts/transactions.php?username=${username}`);
+      const response = await fetch(`http://localhost/expscripts/transactions.php?username=${username}`);
+      // const response = await fetch(`http://localhost/project/ExpenseManager2/phpscripts/transactions.php?username=${username}`);
       const result = await response.json();
 
       if (result.success) {
@@ -80,7 +81,8 @@ const ExpenseContainer: React.FC<ExpenseContainerProps> = ({ username, onTransac
   };
 
   try {
-    const response = await fetch('http://localhost/project/ExpenseManager2/phpscripts/transactions.php', {
+    // const response = await fetch('http://localhost/project/ExpenseManager2/phpscripts/transactions.php', {
+      const response = await fetch('http://localhost/expscripts/transactions.php', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -113,7 +115,8 @@ const handleDeleteExpense = async (index: number) => {
     const expenseToDelete = expenses[index];
 
     try {
-      const response = await fetch('http://localhost/project/ExpenseManager2/phpscripts/deletetransactions.php',{
+      // const response = await fetch('http://localhost/project/ExpenseManager2/phpscripts/deletetransactions.php',{
+        const response = await fetch('http://localhost/expscripts/deletetransactions.php',{
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -225,9 +228,14 @@ const handleDeleteExpense = async (index: number) => {
           <button className='bg-white font-bold text-2xl text-[#2AA1E2] mb-4 z-10 absolute mx-auto w-12 h-12 border-4 hover:border-custom-light-green rounded-full drop-shadow-xl flex justify-center items-center' onClick={toggleModal}>+
           </button>
 
-          <button className='hover:brightness-110 flex gap-2 justify-center items-center w-1/2 h-12 border-t border-custom-sky-blue button-linear-gradient rounded-r-xl drop-shadow-2xl button-inner-shadow font-poppins text-white text-lg'>
-            <Image src={GraphBttnIcon} alt='G-icon' width={25} height={25}></Image> Graph
-          </button>
+          <button
+  className='flex gap-2 justify-center items-center w-1/2 h-12 border-t border-custom-sky-blue button-linear-gradient rounded-r-xl drop-shadow-2xl button-inner-shadow font-poppins text-white text-lg cursor-not-allowed'
+  disabled
+  title="Coming Soon"
+>
+  <Image src={GraphBttnIcon} alt='G-icon' width={25} height={25} /> 
+  Graph
+</button>
         </div>
       </div>
       {isModalOpen && ( <div className='flex justify-center items-end absolute  w-full h-screen right-[0%] pb-14'><DetailsEntryModal onClose={toggleModal} onAddExpense={handleAddExpense} /></div>)}

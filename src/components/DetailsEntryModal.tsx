@@ -1,14 +1,18 @@
 import React, { useState, useRef } from 'react';
+import Image from 'next/image';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 import AddCategoryicon from '@/assets/add_category_icon.svg';
 import AddImagesIcon from '@/assets/AddImageIcon.svg';
 import CloseIcon from '@/assets/CloseIcon.svg';
-import Image from 'next/image';
+import RupeesIcon from '@/assets/RuppesIcon.svg';
 import FoodIcon from '@/assets/Food.svg';
 import EntertainmentIcon from '@/assets/Entertainment.svg';
 import CashbackIcon from '@/assets/Cashback.png';
 import ShoppingIcon from '@/assets/Shopping.png';
+import { startOfMonth, endOfMonth } from 'date-fns';
+import ChooseDateIcon from '@/assets/ChooseDate.svg'
 
-// Define the Category type
 type Category = 'Food' | 'Entertainment' | 'Cashback' | 'Shopping';
 
 interface DetailsEntryModalProps {
@@ -18,10 +22,10 @@ interface DetailsEntryModalProps {
 
 const DetailsEntryModal: React.FC<DetailsEntryModalProps> = ({ onClose, onAddExpense }) => {
   const [amount, setAmount] = useState<number>();
-  const [date, setDate] = useState('');
+  const [date, setDate] = useState<Date | null>(null);
   const [details, setDetails] = useState('');
   const [isCategoryMenuOpen, setIsCategoryMenuOpen] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState<Category | ''>(''); // Use Category type
+  const [selectedCategory, setSelectedCategory] = useState<Category | ''>('');
   const modalContainerRef = useRef<HTMLDivElement>(null);
 
   const categories = [
@@ -32,18 +36,12 @@ const DetailsEntryModal: React.FC<DetailsEntryModalProps> = ({ onClose, onAddExp
   ];
 
   const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    const parsedValue = parseInt(value, 10); // Convert the input value to an integer
-    
-    if (!isNaN(parsedValue)) {
-      setAmount(parsedValue); // Set the state with the parsed integer value
-    } else {
-      setAmount(0); // Optional: Set a default value if parsing fails
-    }
-  };  
+    const parsedValue = parseInt(e.target.value, 10);
+    setAmount(!isNaN(parsedValue) ? parsedValue : 0);
+  };
 
-  const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setDate(e.target.value);
+  const handleDateChange = (date: Date | null) => {
+    setDate(date);
   };
 
   const handleDetailsChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -62,12 +60,12 @@ const DetailsEntryModal: React.FC<DetailsEntryModalProps> = ({ onClose, onAddExp
   const selectCategory = (category: Category, e: React.MouseEvent) => {
     e.stopPropagation();
     setSelectedCategory(category);
-    setIsCategoryMenuOpen(false); // Close the category menu
+    setIsCategoryMenuOpen(false);
   };
 
   const handleSubmit = () => {
     if (amount && date && selectedCategory) {
-      onAddExpense({ amount, date, details, category: selectedCategory });
+      onAddExpense({ amount, date: date.toISOString().split('T')[0], details, category: selectedCategory });
       handleClose();
     } else {
       alert('Please fill in all required fields.');
@@ -80,9 +78,8 @@ const DetailsEntryModal: React.FC<DetailsEntryModalProps> = ({ onClose, onAddExp
         ref={modalContainerRef}
         className="p-6 pb-4 pt-16 w-80 relative bg-[#d9d9d9]/40 rounded-lg shadow backdrop-blur-sm"
       >
-        {/* Close Icon */}
         <button onClick={handleClose} className="absolute top-6 right-6">
-          <Image src={CloseIcon} alt="Close" width={25} height={25} className='icon-filter-red'/>
+          <Image src={CloseIcon} alt="Close" width={25} height={25} className="icon-filter-red" />
         </button>
 
         {isCategoryMenuOpen ? (
@@ -91,7 +88,7 @@ const DetailsEntryModal: React.FC<DetailsEntryModalProps> = ({ onClose, onAddExp
               {categories.map((category) => (
                 <li
                   key={category.name}
-                  onClick={(e) => selectCategory(category.name as Category, e)} // Cast to Category
+                  onClick={(e) => selectCategory(category.name as Category, e)}
                   className="cursor-pointer px-4 py-2 hover:bg-gray-100 flex items-center gap-2 border-2 border-b-custom-lightgray"
                 >
                   <Image src={category.icon} alt={`${category.name} icon`} width={20} height={20} />
@@ -102,25 +99,20 @@ const DetailsEntryModal: React.FC<DetailsEntryModalProps> = ({ onClose, onAddExp
           </div>
         ) : (
           <>
-            <div className="mb-4">
+            <div className="mb-4 relative">
               <label className="block text-gray-700 hidden">Amount</label>
-              <input
-                type="number"
-                value={amount}
-                onChange={handleAmountChange}
-                className="bg-white w-full px-3 py-2 border rounded-lg text-gray-700 shadow"
-                placeholder="Enter amount in RS"
-              />
-            </div>
-
-            <div className="mb-4">
-              <label className="block text-gray-700 hidden">Date</label>
-              <input
-                type="date"
-                value={date}
-                onChange={handleDateChange}
-                className="bg-white w-full px-3 py-2 border rounded-lg text-gray-400 shadow"
-              />
+              <div className="flex items-center">
+                <span className="absolute left-3">
+                  <Image src={RupeesIcon} alt="Rupees Icon" width={14} height={14} />
+                </span>
+                <input
+                  type="number"
+                  value={amount}
+                  onChange={handleAmountChange}
+                  className="bg-white w-full pl-10 pr-3 py-2 border rounded-lg text-gray-700 shadow"
+                  placeholder="Enter amount in RS"
+                />
+              </div>
             </div>
 
             <div className="mb-4">
@@ -133,12 +125,30 @@ const DetailsEntryModal: React.FC<DetailsEntryModalProps> = ({ onClose, onAddExp
                 placeholder="Enter more details (optional)"
               />
             </div>
+
+            <div className="mb-4">
+              <label className="block text-gray-700 hidden">Date</label>
+              <div className="relative">
+              <DatePicker
+                selected={date}
+                onChange={handleDateChange}
+                dateFormat="dd MMM yyyy"
+                minDate={startOfMonth(new Date())}
+                maxDate={endOfMonth(new Date())}
+                placeholderText="Select date"
+                className="pl-10 bg-white w-full px-3 py-2 border rounded-lg text-gray-400 shadow cursor-pointer"
+              />
+              <span className="absolute left-3 top-1/2 transform -translate-y-1/2">
+                  <Image src={ChooseDateIcon} alt="Choose Date Icon" width={14} height={14} />
+                </span>
+              </div>
+            </div>
           </>
         )}
 
-        <div className="flex gap-20 justify-center relative">
+        <div className="flex gap-20 justify-center items-center relative">
           {selectedCategory ? (
-            <div className="relative inline-block group">
+            <div className=" w-1/2 relative inline-block group">
               <button
                 onClick={toggleCategoryMenu}
                 className="text-sm text-white font-semibold px-4 py-2 border rounded-lg shadow cursor-pointer bg-custom-darkgray"
@@ -160,22 +170,23 @@ const DetailsEntryModal: React.FC<DetailsEntryModalProps> = ({ onClose, onAddExp
             </div>
           )}
 
-          <div className="relative inline-block group">
+          {/* <div className="relative inline-block group">
             <button className="icon-filter-gray rounded-md shadow">
               <Image src={AddImagesIcon} alt="add images" width={30} height={30} />
             </button>
             <span className="absolute transform translate-x-[4.8px] mt-1 text-gray-700 text-xs bg-white px-1 py-1 rounded-md shadow-lg opacity-0 text-left group-hover:opacity-100 transition-opacity duration-200">
               Add Images
             </span>
-          </div>
-        </div>
+          </div> */}
+        
 
-        <button 
-          className="hover:brightness-110 mt-4 w-full border-t border-custom-sky-blue button-linear-gradient rounded-xl py-2 drop-shadow-2xl button-inner-shadow font-poppins text-white text-lg"
+        <button
+          className="hover:brightness-110 mt-4 w-1/2 border-t border-custom-sky-blue button-linear-gradient rounded-xl py-2 drop-shadow-2xl button-inner-shadow font-poppins text-white text-lg"
           onClick={handleSubmit}
         >
           Add Expense
         </button>
+        </div>
       </div>
     </div>
   );
