@@ -19,7 +19,7 @@ interface TopBarProps {
 const TopBar: React.FC<TopBarProps> = ({ username, totalIncome, totalExpense }) => {
     return (
         <header className='absolute z-10 w-full'>
-            <nav className='w-full h-10 bg-custom-gradient text-white flex items-center justify-between px-14'>
+            <nav className='w-full h-10 bg-custom-gradient dark:bg-black text-white flex items-center justify-between px-14'>
                 <h1 className='pb-2 drop-shadow-3xl text-3xl'>Expense Manager</h1>
                 <ul className='font-poppins text-md flex font-light'>
                     <li className='flex gap-1 hover:cursor-pointer ml-8 drop-shadow-lg'><Image src={DarkModeIcon} alt='change theme:' width={14} height={14} className='icon-filter-white'></Image>Theme</li>
@@ -30,30 +30,30 @@ const TopBar: React.FC<TopBarProps> = ({ username, totalIncome, totalExpense }) 
                 </ul>
             </nav>
 
-            <div className='w-full h-20 bg-white rounded-b-xl drop-shadow-lg shadow-sm flex font-poppins'>
+            <div className='w-full h-20 bg-white dark:bg-black-theme-dark rounded-b-xl drop-shadow-lg shadow-sm flex font-poppins'>
                 <div className='w-1/3 flex flex-col justify-center'>
                     <div className='flex justify-center text-custom-darkgray'>This Month <span className='pl-1 text-custom-red font-semibold'>Expense</span></div> 
-                    <div className='flex justify-center'>{totalExpense !== null ? `₹${totalExpense}` : '₹0'}</div>
+                    <div className='flex justify-center text-custom-red'>{totalExpense !== null ? `₹${totalExpense}` : '₹0'}</div>
                 </div>
-                <div className='w-1/3 flex flex-col justify-center gap-1 items-center border-x-2 border-slate-200'>
+                <div className='w-1/3 flex flex-col justify-center gap-1 items-center border-x-2 border-slate-200 dark:border-slate-500'>
                 <div className='flex justify-center text-custom-darkgray'>
   {(totalIncome !== null && totalExpense !== null) && (totalIncome - totalExpense < 0) ? (
-    <span className='text-[#BF3636] text-lg font-extralight text font-semibold flex flex-col justify-center items-center'>Budget deficit ! <Image src={SadEmoji} alt='sad-emoji' width={35} height={35}></Image> </span>
+    <span className='text-[#BF3636] text-lg font-extralight font-semibold flex flex-col justify-center items-center'>Budget deficit ! <Image src={SadEmoji} alt='sad-emoji' width={35} height={35}></Image> </span>
   ) : (
     <>
       Current <span className='pl-1 text-[#d2cd44] font-semibold'>Savings</span>
     </>
   )}
 </div>
-<div className='flex justify-center'>
+<div className='flex justify-center text-[#d2cd44]'>
   {(totalIncome !== null && totalExpense !== null) ? (
     totalIncome - totalExpense < 0 ? '' : `₹${totalIncome - totalExpense}`
   ) : '₹0'}
 </div>
                 </div>
                 <div className='w-1/3 flex flex-col justify-center'>
-                    <div className='flex justify-center text-custom-darkgray'>This Month <span className='pl-1 text-custom-green font-semibold'>Income</span></div>
-                    <div className='flex justify-center'>{totalIncome !== null ? `₹${totalIncome}` : '₹0'}</div>
+                    <div className='flex justify-center text-custom-darkgray'>This Month <span className='pl-1 text-custom-green dark:text-custom-light-green font-semibold'>Income</span></div>
+                    <div className='flex justify-center text-custom-green dark:text-custom-light-green'>{totalIncome !== null ? `₹${totalIncome}` : '₹0'}</div>
                 </div>
             </div>
         </header>

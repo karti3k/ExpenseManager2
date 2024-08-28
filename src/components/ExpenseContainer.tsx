@@ -37,6 +37,7 @@ interface ExpenseContainerProps {
 const ExpenseContainer: React.FC<ExpenseContainerProps> = ({ username, onTransactionSuccess }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [expenses, setExpenses] = useState<{ amount: number; date: string; details: string; category: Category; time: string }[]>([]);
+  const [view, setView] = useState<'expenses' | 'comingSoon'>('expenses');
 
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
@@ -176,10 +177,11 @@ const handleDeleteExpense = async (index: number) => {
   });
 
   return (
-    <div className='font-poppins w-full h-screen bg-[#E9F7FF] px-28 flex flex-col justify-end'>
-      <div className='bg-white w-full h-[72%] rounded-3xl shadow-inner-custom flex flex-col justify-between'>
-        <div className='p-6 overflow-y-auto'>
-          {expenses.length === 0 ? (
+    <div className='font-poppins w-full h-screen bg-[#E9F7FF] dark:bg-black-theme-very-light px-28 flex flex-col justify-end'>
+      <div className='bg-white dark:bg-black-theme-dark w-full h-[72%] rounded-3xl shadow-inner-custom flex flex-col justify-between'>
+        <div className='p-6 px-12 overflow-y-auto'>
+        {view === 'expenses' ? (
+          expenses.length === 0 ? (
             <p className='text-center text-gray-500 pt-40 opacity-40'>No expenses added yet!</p>
           ) : (
             sortedDates.map((date) => (
@@ -205,7 +207,7 @@ const handleDeleteExpense = async (index: number) => {
                             <Image src={icon} alt={`${expense.category} icon`} width={28} height={28} className='mr-2' />
                             <p className='w-60'>{expense.category}</p>
                             <p className='w-80'><strong>Details:</strong> {expense.details}</p>
-                            <div className='flex gap-2'><Image src={ClockIcon} width={17} height={17} alt='clock'></Image><p className='w-60'>{expense.time}</p></div>
+                            <div className='flex gap-2'><Image src={ClockIcon} width={17} height={17} alt='clock'></Image><p className='w-40'>{expense.time}</p></div>
                             <p className={`${amountClass} flex items-center`}>
                               <strong>Rs {expense.amount}</strong>
                               <Image src={amountIcon} alt={`${isCashback ? 'Money In' : 'Money Out'} icon`} width={24} height={24} className='ml-2' />
@@ -218,20 +220,21 @@ const handleDeleteExpense = async (index: number) => {
                 </ul>
               </div>
             ))
-          )}
+          )
+        ) : (
+          <p className='text-center text-gray-500 pt-40 opacity-40'>Coming Soon...</p> // Coming Soon message
+        )}
         </div>
         <div className='w-full h-12 bg-[#E9F7FF] rounded-xl flex justify-center items-end'>
-          <button className='hover:brightness-110 flex gap-2 justify-center items-center w-1/2 h-12 border-t border-custom-sky-blue button-linear-gradient rounded-l-xl drop-shadow-2xl button-inner-shadow font-poppins text-white text-lg'>
+          <button onClick={() => setView('expenses')} className='hover:brightness-110 flex gap-2 justify-center items-center w-1/2 h-12 border-t border-custom-sky-blue dark:border-black-theme-dark bg-custom-gradient dark:bg-black rounded-l-xl drop-shadow-2xl button-inner-shadow font-poppins text-white text-lg'>
             <Image src={ExpensesBttnIcon} alt='E-icon' width={35} height={35}></Image> Expenses
           </button>
 
-          <button className='bg-white font-bold text-2xl text-[#2AA1E2] mb-4 z-10 absolute mx-auto w-12 h-12 border-4 hover:border-custom-light-green rounded-full drop-shadow-xl flex justify-center items-center' onClick={toggleModal}>+
+          <button className='bg-white dark:bg-black font-bold text-2xl text-[#2AA1E2] mb-4 z-10 absolute mx-auto w-12 h-12 border-4 hover:border-custom-light-green rounded-full drop-shadow-xl flex justify-center items-center' onClick={toggleModal}>+
           </button>
 
-          <button
-  className='flex gap-2 justify-center items-center w-1/2 h-12 border-t border-custom-sky-blue button-linear-gradient rounded-r-xl drop-shadow-2xl button-inner-shadow font-poppins text-white text-lg cursor-not-allowed'
-  disabled
-  title="Coming Soon"
+          <button onClick={() => setView('comingSoon')}
+  className='hover:brightness-110 flex gap-2 justify-center items-center w-1/2 h-12 border-t border-custom-sky-blue dark:border-black-theme-dark bg-custom-gradient dark:bg-black rounded-r-xl drop-shadow-2xl button-inner-shadow font-poppins text-white text-lg cursor-pointer'
 >
   <Image src={GraphBttnIcon} alt='G-icon' width={25} height={25} /> 
   Graph
