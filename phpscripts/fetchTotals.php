@@ -47,7 +47,13 @@ if (isset($_GET['username'])) {
         ]);
     } else {
         // No data found for the user or invalid data format
-        echo json_encode(["success" => false, "message" => "No data found for user"]);
+        echo json_encode([
+            "success" => true,
+            "data" => [
+                "totalIncome" => 0,
+                "totalExpense" => 0
+            ]
+        ]);
     }
 } else {
     echo json_encode(["success" => false, "message" => "Username not provided"]);

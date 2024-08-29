@@ -89,7 +89,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
             echo json_encode(['success' => true, 'data' => $transactionArray]);
         } else {
-            echo json_encode(['success' => false, 'message' => 'No Transactions are added yet']);
+            $transactionArray = [];
+            echo json_encode(['success' => true, 'data' => $transactionArray]);
         }
     } else {
         echo json_encode(['success' => false, 'message' => 'Username is required']);
