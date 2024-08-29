@@ -132,12 +132,17 @@ const handleDeleteExpense = async (index: number) => {
       if (result.success) {
         alert('Transaction deleted successfully');
         fetchTransactions();
+        onTransactionSuccess(); // Notify the MainPage that a transaction was added
       } else {
         alert(result.message || 'Failed to delete transaction');
-        console.error('Failed to delete transaction:', result);
+        console.error('Failed to delete transaction:', result.message);
+        fetchTransactions();
+        onTransactionSuccess(); // Notify the MainPage that a transaction was added
       }
     } catch (error) {
-      console.error('Catched Error deleting transaction:', error);
+      fetchTransactions();
+      onTransactionSuccess(); // Notify the MainPage that a transaction was added
+      console.error('Catched Error deleting transaction:',error);
       alert('Catched Error deleting transaction');
     }
   }
@@ -189,7 +194,10 @@ const handleDeleteExpense = async (index: number) => {
                       const timeB = new Date(`${b.date} ${b.time}`).getTime();
                       return timeB - timeA;
                     })
-                    .map((expense, index) => {
+                    .map((expense, groupIndex) => {
+                      const expenseIndex = expenses.findIndex(
+                        (exp) => exp.amount === expense.amount && exp.date === expense.date && exp.time === expense.time && exp.category === expense.category && exp.details === expense.details
+                      );
                       const icon = categoryIcons[expense.category];
                       const isCashback = expense.category === 'Cashback';
                       const amountClass = isCashback ? 'text-green-500' : 'text-red-500';
@@ -197,7 +205,7 @@ const handleDeleteExpense = async (index: number) => {
                       const listItemStyle = categoryStyles[expense.category];
 
                       return (
-                        <li key={index} className={`mt-2 flex justify-between items-center py-1 rounded-full px-2 ${listItemStyle}`}>
+                        <li key={groupIndex} className={`mt-2 flex justify-between items-center py-1 rounded-full px-2 ${listItemStyle}`}>
                           <div className='flex items-center'>
                             <Image src={icon} alt={`${expense.category} icon`} width={28} height={28} className='mr-2' />
                             <p className='w-60'>{expense.category}</p>
@@ -208,7 +216,7 @@ const handleDeleteExpense = async (index: number) => {
                               <Image src={amountIcon} alt={`${isCashback ? 'Money In' : 'Money Out'} icon`} width={24} height={24} className='ml-2' />
                             </p>
                           </div>
-                          <button onClick={() => handleDeleteExpense(index)} className=""><Image className='icon-filter-red' src={DeleteIcon} alt='delete' width={20} height={20}></Image></button>
+                          <button onClick={() => handleDeleteExpense(expenseIndex)} className=""><Image className='icon-filter-red' src={DeleteIcon} alt='delete' width={20} height={20}></Image></button>
                         </li>
                       );
                     })}
