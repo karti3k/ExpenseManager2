@@ -45,3 +45,9 @@
 .trasp-blue{
   background-color: #32b7ffbb;
 }
+.button-linear-gradient-second {
+  background: linear-gradient(180deg, rgba(147, 147, 147, 0.00) 0%, rgba(147, 147, 147, 0.75) 14.58%);
+}
+.button-linear-gradient-third {
+  background: linear-gradient(180deg, rgba(54, 63, 83, 0.00) 0%, rgba(54, 63, 83, 0.75) 14.58%);
+}

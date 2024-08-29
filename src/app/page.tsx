@@ -18,6 +18,7 @@ export default function Home() {
     <main className='bg-white'>
       {/* Conditionally render LoginPage or MainPage based on login state */}
       {isLoggedIn ? <MainPage username={username} /> : <LoginPage onLoginSuccess={handleLogin} />}
+      {/* <MainPage username={username} /> */}
     </main>
   );
 }
