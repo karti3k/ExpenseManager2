@@ -23,15 +23,22 @@ $reference_table = 'transactions'; // Adjust this according to your Firebase str
 
 // Get username from query parameters
 $username = isset($_GET['username']) ? $_GET['username'] : null;
+// Get theme from query parameters
+$theme = isset($_GET['theme']) ? $_GET['theme'] : 'light'; // Default to 'light' if not specified
 $transactions = readData($reference_table.'/' . $username);
+
+// Set text color based on theme
+$text_color = $theme === 'dark' ? 'white' : 'black';
 
 // Initialize category totals
 $category_totals = [];
+$total_amount = 0; // To calculate the total amount for percentages
 
 if ($transactions) {
     foreach ($transactions as $transaction) {
         $category = $transaction['category'];
         $amount = (float)$transaction['amount'];
+        $total_amount += $amount;
 
         if (isset($category_totals[$category])) {
             $category_totals[$category] += $amount;
@@ -41,11 +48,17 @@ if ($transactions) {
     }
 }
 
-// Convert PHP array to JSON format for use in JavaScript
+// Convert category totals to JSON format for use in the response
 $category_totals_json = json_encode($category_totals);
 
+// Calculate percentages for each category
+$category_percentages = [];
+foreach ($category_totals as $category => $amount) {
+    $percentage = ($total_amount > 0) ? round(($amount / $total_amount) * 100, 2) : 0;
+    $category_percentages[] = $category . ' (' . $percentage . '%)';
+}
+
 // Format the data for QuickChart
-$labels = array_keys($category_totals);
 $data = array_values($category_totals);
 
 $chartData = [
@@ -54,7 +67,21 @@ $chartData = [
         'datasets' => [
             ['data' => $data]
         ],
-        'labels' => $labels
+        'labels' => $category_percentages // Use formatted labels with percentages
+    ],
+    'options' => [
+        'plugins' => [
+            'datalabels' => [
+                'display' => false // Disable datalabels plugin to remove text on the chart
+            ]
+        ],
+        'legend' => [
+            'display' => true, // Ensure legend is displayed
+            'labels' => [
+                'fontColor' => $text_color, // Set text color based on theme
+                'usePointStyle' => true, // Optional: Use point style for better visual representation
+            ]
+        ]
     ]
 ];
 
@@ -68,6 +95,6 @@ $chartUrl = "https://quickchart.io/chart?c=" . $chartDataUrl;
 echo json_encode([
     'success' => true,
     'chart_url' => $chartUrl, // URL to access the chart image
-    'data' => $category_totals_json
+    'data' => $category_totals_json // Send the category totals in JSON format
 ]);
 ?>

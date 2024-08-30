@@ -39,6 +39,7 @@ const ExpenseContainer: React.FC<ExpenseContainerProps> = ({ username, onTransac
   const [expenses, setExpenses] = useState<{ amount: number; date: string; details: string; category: Category; time: string }[]>([]);
   const [view, setView] = useState<'expenses' | 'comingSoon'>('expenses');
   const [chartUrl, setChartUrl] = useState<string | null>(null);
+  const [theme, setTheme] = useState<'light' | 'dark'>('light'); // Initialize with default theme
 
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
@@ -46,6 +47,8 @@ const ExpenseContainer: React.FC<ExpenseContainerProps> = ({ username, onTransac
 
   //Changes
   useEffect(() => {
+    const currentTheme = document.body.classList.contains('dark') ? 'dark' : 'light';
+    setTheme(currentTheme);
     fetchTransactions(); // Fetch transactions when the component mounts
     fetchCharts();
   }, [username]); // Depend on username
@@ -72,8 +75,8 @@ const ExpenseContainer: React.FC<ExpenseContainerProps> = ({ username, onTransac
     if (!username) return; // Do not fetch if username is not available
 
     try {
-      const response = await fetch(`http://localhost/expscripts/transactions.php?username=${username}`);
-      // const response = await fetch(`http://localhost/project/ExpenseManager2/phpscripts/transactions.php?username=${username}`);
+      const response = await fetch(`http://localhost/expscripts/transactions.php?username=${username}&theme=${theme}`);
+      // const response = await fetch(`http://localhost/project/ExpenseManager2/phpscripts/transactions.php?username=${username}&theme=${theme}`);
       const result = await response.json();
 
       if (result.success) {
