@@ -52,8 +52,9 @@ const ExpenseContainer: React.FC<ExpenseContainerProps> = ({ username, onTransac
 
   const fetchCharts = async () => {
     if (username) {
-      fetch(`http://localhost/project/ExpenseManager2/phpscripts/charts.php?username=${username}`)
-        .then(response => response.json())
+      // fetch(`http://localhost/project/ExpenseManager2/phpscripts/charts.php?username=${username}`)
+      fetch(`http://localhost/expscripts/charts.php?username=${username}`)
+      .then(response => response.json())
         .then(result => {
           if (result.success) {
             setChartUrl(result.chart_url); // Get the chart URL from the backend
@@ -71,8 +72,8 @@ const ExpenseContainer: React.FC<ExpenseContainerProps> = ({ username, onTransac
     if (!username) return; // Do not fetch if username is not available
 
     try {
-      // const response = await fetch(`http://localhost/expscripts/transactions.php?username=${username}`);
-      const response = await fetch(`http://localhost/project/ExpenseManager2/phpscripts/transactions.php?username=${username}`);
+      const response = await fetch(`http://localhost/expscripts/transactions.php?username=${username}`);
+      // const response = await fetch(`http://localhost/project/ExpenseManager2/phpscripts/transactions.php?username=${username}`);
       const result = await response.json();
 
       if (result.success) {
@@ -100,8 +101,8 @@ const ExpenseContainer: React.FC<ExpenseContainerProps> = ({ username, onTransac
   };
 
   try {
-    const response = await fetch('http://localhost/project/ExpenseManager2/phpscripts/transactions.php', {
-      // const response = await fetch('http://localhost/expscripts/transactions.php', {
+    // const response = await fetch('http://localhost/project/ExpenseManager2/phpscripts/transactions.php', {
+      const response = await fetch('http://localhost/expscripts/transactions.php', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -135,8 +136,8 @@ const handleDeleteExpense = async (index: number) => {
     const expenseToDelete = expenses[index];
 
     try {
-      const response = await fetch('http://localhost/project/ExpenseManager2/phpscripts/deletetransactions.php',{
-        // const response = await fetch('http://localhost/expscripts/deletetransactions.php',{
+      // const response = await fetch('http://localhost/project/ExpenseManager2/phpscripts/deletetransactions.php',{
+        const response = await fetch('http://localhost/expscripts/deletetransactions.php',{
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -205,7 +206,7 @@ const handleDeleteExpense = async (index: number) => {
 
   return (
     <div className='font-poppins w-full h-screen bg-[#E9F7FF] dark:bg-black-theme-very-light px-28 flex flex-col justify-end items-center'>
-      <div className='bg-white dark:bg-black-theme-dark w-[95%] h-[75%] rounded-3xl shadow-inner-custom flex flex-col justify-between'>
+      <div className='bg-white dark:bg-black-theme-dark w-full h-[70%] rounded-3xl shadow-inner-custom flex flex-col justify-between'>
         <div className='p-6 px-12 overflow-y-auto '>
         {view === 'expenses' ? (
           expenses.length === 0 ? (
@@ -232,7 +233,7 @@ const handleDeleteExpense = async (index: number) => {
                       const listItemStyle = categoryStyles[expense.category];
 
                       return (
-                        <li key={groupIndex} className={`mt-2 flex justify-between items-center py-1 rounded-full px-2 ${listItemStyle}`}>
+                        <li key={groupIndex} className={`mt-2 flex justify-between items-center py-2 rounded-full px-2 ${listItemStyle}`}>
                           <div className='flex items-center'>
                             <Image src={icon} alt={`${expense.category} icon`} width={28} height={28} className='mr-2' />
                             <p className='w-60'>{expense.category}</p>
@@ -254,7 +255,7 @@ const handleDeleteExpense = async (index: number) => {
           )
         ) : (
           <div className='flex items-center justify-center'>
-            <p className='text-center text-gray-500 dark:text-white pt-8 opacity-40 w-[55%] h-[20%] flex justify-center items-center'>{chartUrl ? (
+            <p className='text-center text-gray-500 dark:text-white w-[55%] h-[20%] flex justify-center items-center'>{chartUrl ? (
               <img src={`${chartUrl}`} alt="Expense Chart" />
             ) : (
               <span>Please add expenses first!</span>
