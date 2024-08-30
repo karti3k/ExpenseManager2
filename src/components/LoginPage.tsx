@@ -21,13 +21,13 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
-        // const url = isSignUp
-        //     ? 'http://localhost/project/ExpenseManager2/phpscripts/signup.php'
-        //     : 'http://localhost/project/ExpenseManager2/phpscripts/signin.php';
-
         const url = isSignUp
-            ? 'http://localhost/expscripts/signup.php'
-            : 'http://localhost/expscripts/signin.php';
+            ? 'http://localhost/project/ExpenseManager2/phpscripts/signup.php'
+            : 'http://localhost/project/ExpenseManager2/phpscripts/signin.php';
+
+        // const url = isSignUp
+        //     ? 'http://localhost/expscripts/signup.php'
+        //     : 'http://localhost/expscripts/signin.php';
 
         const body = isSignUp
             ? JSON.stringify({ email, username, password })

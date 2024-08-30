@@ -38,6 +38,7 @@ const ExpenseContainer: React.FC<ExpenseContainerProps> = ({ username, onTransac
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [expenses, setExpenses] = useState<{ amount: number; date: string; details: string; category: Category; time: string }[]>([]);
   const [view, setView] = useState<'expenses' | 'comingSoon'>('expenses');
+  const [chartUrl, setChartUrl] = useState<string | null>(null);
 
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
@@ -46,15 +47,32 @@ const ExpenseContainer: React.FC<ExpenseContainerProps> = ({ username, onTransac
   //Changes
   useEffect(() => {
     fetchTransactions(); // Fetch transactions when the component mounts
+    fetchCharts();
   }, [username]); // Depend on username
 
+  const fetchCharts = async () => {
+    if (username) {
+      fetch(`http://localhost/project/ExpenseManager2/phpscripts/charts.php?username=${username}`)
+        .then(response => response.json())
+        .then(result => {
+          if (result.success) {
+            setChartUrl(result.chart_url); // Get the chart URL from the backend
+          } else {
+            console.error('Failed to fetch chart:', result.message);
+          }
+        })
+        .catch(error => {
+          console.error('Error fetching chart:', error);
+        });
+    }
+  }
   // Fetch transactions from the backend
   const fetchTransactions = async () => {
     if (!username) return; // Do not fetch if username is not available
 
     try {
-      const response = await fetch(`http://localhost/expscripts/transactions.php?username=${username}`);
-      // const response = await fetch(`http://localhost/project/ExpenseManager2/phpscripts/transactions.php?username=${username}`);
+      // const response = await fetch(`http://localhost/expscripts/transactions.php?username=${username}`);
+      const response = await fetch(`http://localhost/project/ExpenseManager2/phpscripts/transactions.php?username=${username}`);
       const result = await response.json();
 
       if (result.success) {
@@ -82,8 +100,8 @@ const ExpenseContainer: React.FC<ExpenseContainerProps> = ({ username, onTransac
   };
 
   try {
-    // const response = await fetch('http://localhost/project/ExpenseManager2/phpscripts/transactions.php', {
-      const response = await fetch('http://localhost/expscripts/transactions.php', {
+    const response = await fetch('http://localhost/project/ExpenseManager2/phpscripts/transactions.php', {
+      // const response = await fetch('http://localhost/expscripts/transactions.php', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -96,6 +114,7 @@ const ExpenseContainer: React.FC<ExpenseContainerProps> = ({ username, onTransac
     if (result.success) {
       alert('Transaction added successfully');
       fetchTransactions();  // Refresh the list of transactions after a successful addition
+      fetchCharts();
       onTransactionSuccess(); // Notify the MainPage that a transaction was added
       toggleModal();  // Close the modal after a successful transaction
     } else {
@@ -116,8 +135,8 @@ const handleDeleteExpense = async (index: number) => {
     const expenseToDelete = expenses[index];
 
     try {
-      // const response = await fetch('http://localhost/project/ExpenseManager2/phpscripts/deletetransactions.php',{
-        const response = await fetch('http://localhost/expscripts/deletetransactions.php',{
+      const response = await fetch('http://localhost/project/ExpenseManager2/phpscripts/deletetransactions.php',{
+        // const response = await fetch('http://localhost/expscripts/deletetransactions.php',{
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -136,15 +155,18 @@ const handleDeleteExpense = async (index: number) => {
       if (result.success) {
         alert('Transaction deleted successfully');
         fetchTransactions();
+        fetchCharts();
         onTransactionSuccess(); // Notify the MainPage that a transaction was added
       } else {
         alert(result.message || 'Failed to delete transaction');
         console.error('Failed to delete transaction:', result.message);
         fetchTransactions();
+        fetchCharts();
         onTransactionSuccess(); // Notify the MainPage that a transaction was added
       }
     } catch (error) {
       fetchTransactions();
+      fetchCharts();
       onTransactionSuccess(); // Notify the MainPage that a transaction was added
       console.error('Catched Error deleting transaction:',error);
       alert('Catched Error deleting transaction');
@@ -182,9 +204,9 @@ const handleDeleteExpense = async (index: number) => {
   });
 
   return (
-    <div className='font-poppins w-full h-screen bg-[#E9F7FF] dark:bg-black-theme-very-light px-28 flex flex-col justify-end'>
-      <div className='bg-white dark:bg-black-theme-dark w-full h-[72%] rounded-3xl shadow-inner-custom flex flex-col justify-between'>
-        <div className='p-6 px-12 overflow-y-auto'>
+    <div className='font-poppins w-full h-screen bg-[#E9F7FF] dark:bg-black-theme-very-light px-28 flex flex-col justify-end items-center'>
+      <div className='bg-white dark:bg-black-theme-dark w-[95%] h-[75%] rounded-3xl shadow-inner-custom flex flex-col justify-between'>
+        <div className='p-6 px-12 overflow-y-auto '>
         {view === 'expenses' ? (
           expenses.length === 0 ? (
             <p className='text-center text-gray-500 pt-40 opacity-40'>No expenses added yet!</p>
@@ -227,10 +249,17 @@ const handleDeleteExpense = async (index: number) => {
                     })}
                 </ul>
               </div>
+              
             ))
           )
         ) : (
-          <p className='text-center text-gray-500 pt-40 opacity-40'>Coming Soon...</p> // Coming Soon message
+          <div className='flex items-center justify-center'>
+            <p className='text-center text-gray-500 dark:text-white pt-8 opacity-40 w-[55%] h-[20%] flex justify-center items-center'>{chartUrl ? (
+              <img src={`${chartUrl}`} alt="Expense Chart" />
+            ) : (
+              <span>Please add expenses first!</span>
+            )}</p>
+          </div>
         )}
         </div>
         <div className='w-full h-12 bg-[#E9F7FF] rounded-xl flex justify-center items-end'>
