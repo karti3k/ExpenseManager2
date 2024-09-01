@@ -12,8 +12,9 @@ import ShoppingIcon from '@/assets/Shopping.png';
 import { startOfMonth, endOfMonth } from 'date-fns';
 import ChooseDateIcon from '@/assets/ChooseDate.svg';
 import AddDetailsIcon from '@/assets/AddDetailsIcon.svg'
+import Notification from './Notification';
 
-type Category = 'Food' | 'Entertainment' | 'Cashback' | 'Shopping';
+type Category = 'Food' | 'Entertainment' | 'Cashback' | 'Shopping' | 'Income';
 
 interface DetailsEntryModalProps {
   onClose: () => void;
@@ -27,12 +28,15 @@ const DetailsEntryModal: React.FC<DetailsEntryModalProps> = ({ onClose, onAddExp
   const [isCategoryMenuOpen, setIsCategoryMenuOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<Category | ''>('');
   const modalContainerRef = useRef<HTMLDivElement>(null);
+  const [showNotification, setShowNotification] = useState(false);
+  const [notificationMessage, setNotificationMessage] = useState('');
 
   const categories = [
     { name: 'Food', icon: FoodIcon },
     { name: 'Entertainment', icon: EntertainmentIcon },
     { name: 'Cashback', icon: CashbackIcon },
     { name: 'Shopping', icon: ShoppingIcon },
+    { name: 'Income', icon: CashbackIcon },
   ];
 
   const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -71,15 +75,20 @@ const DetailsEntryModal: React.FC<DetailsEntryModalProps> = ({ onClose, onAddExp
       onAddExpense({ amount, date: isoDate, details, category: selectedCategory });
       handleClose();
     } else {
-      alert('Please fill in all required fields.');
+      setNotificationMessage('Please fill in all required fields.');
+      setShowNotification(true);
     }
+  };
+
+  const handleCloseNotification = () => {
+    setShowNotification(false);
   };
 
   return (
     <div className="w-1/2 inset-0 flex justify-center items-center font-poppins">
       <div
         ref={modalContainerRef}
-        className="p-6 pb-4 pt-16 w-80 relative bg-white/65 dark:bg-black-theme-dark/65 rounded-lg shadow backdrop-blur-sm border-2 border-white dark:border-black-theme-very-light"
+        className="p-6 pb-4 pt-16 w-80 relative bg-white/65 dark:bg-black-theme-light/95 rounded-lg shadow backdrop-blur-sm border-2 border-white dark:border-black-theme-very-light"
       >
         <button onClick={handleClose} className="absolute top-6 right-6">
           <Image src={CloseIcon} alt="Close" width={25} height={25} className="icon-filter-red" />
@@ -92,7 +101,7 @@ const DetailsEntryModal: React.FC<DetailsEntryModalProps> = ({ onClose, onAddExp
                 <li
                   key={category.name}
                   onClick={(e) => selectCategory(category.name as Category, e)}
-                  className="cursor-pointer px-4 py-2 hover:bg-gray-100 hover:dark:bg-black-theme-light flex items-center gap-2 border-2 border-b-custom-lightgray dark:border-b-slate-900"
+                  className="cursor-pointer px-4 py-2 hover:bg-gray-100 hover:dark:bg-black-theme-light flex items-center gap-2 border-2 border-b-custom-lightgray dark:border-b-slate-900 dark:bg-gray-500"
                 >
                   <Image src={category.icon} alt={`${category.name} icon`} width={20} height={20} />
                   {category.name}
@@ -112,7 +121,7 @@ const DetailsEntryModal: React.FC<DetailsEntryModalProps> = ({ onClose, onAddExp
                   type="number"
                   value={amount}
                   onChange={handleAmountChange}
-                  className="bg-white dark:bg-black w-full pl-10 pr-3 py-2 border rounded-lg text-gray-700 shadow"
+                  className="bg-white dark:bg-black w-full pl-10 pr-3 py-2 border rounded-lg text-gray-700 dark:text-white shadow"
                   placeholder="Enter amount in RS"
                 />
               </div>
@@ -165,19 +174,26 @@ const DetailsEntryModal: React.FC<DetailsEntryModalProps> = ({ onClose, onAddExp
           ) : (
             <button
               onClick={toggleCategoryMenu}
-              className="hover:brightness-110 font-normal px-4 py-2 rounded-lg cursor-pointer button-linear-gradient-second border-t border-custom-darkgray w-full drop-shadow-2xl button-inner-shadow font-poppins text-white text-sm"
+              className="hover:brightness-110 dark:border-white dark:border-2 font-normal px-4 py-2 rounded-lg cursor-pointer button-linear-gradient-second border-t border-custom-darkgray w-full drop-shadow-2xl button-inner-shadow font-poppins text-white text-sm"
             >
               Set Category
             </button>
           )}
 
           <button
-            className="hover:brightness-110 w-full border-t border-custom-sky-blue button-linear-gradient rounded-xl py-2 drop-shadow-2xl button-inner-shadow font-poppins text-white text-sm"
+            className="hover:brightness-110 dark:border-custom-sky-blue dark:border-2 w-full border-t border-custom-sky-blue button-linear-gradient rounded-xl py-2 drop-shadow-2xl button-inner-shadow font-poppins text-white text-sm"
             onClick={handleSubmit}
           >
             Add Expense
           </button>
         </div>
+        {showNotification && (
+          <Notification
+            message={notificationMessage}
+            type="error"
+            onClose={handleCloseNotification}
+          />
+        )}
       </div>
     </div>
   );
