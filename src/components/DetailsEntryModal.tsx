@@ -14,7 +14,7 @@ import ChooseDateIcon from '@/assets/ChooseDate.svg';
 import AddDetailsIcon from '@/assets/AddDetailsIcon.svg'
 import Notification from './Notification';
 
-type Category = 'Food' | 'Entertainment' | 'Cashback' | 'Shopping';
+type Category = 'Food' | 'Entertainment' | 'Cashback' | 'Shopping' | 'Income';
 
 interface DetailsEntryModalProps {
   onClose: () => void;
@@ -36,6 +36,7 @@ const DetailsEntryModal: React.FC<DetailsEntryModalProps> = ({ onClose, onAddExp
     { name: 'Entertainment', icon: EntertainmentIcon },
     { name: 'Cashback', icon: CashbackIcon },
     { name: 'Shopping', icon: ShoppingIcon },
+    { name: 'Income', icon: CashbackIcon },
   ];
 
   const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -100,7 +101,7 @@ const DetailsEntryModal: React.FC<DetailsEntryModalProps> = ({ onClose, onAddExp
                 <li
                   key={category.name}
                   onClick={(e) => selectCategory(category.name as Category, e)}
-                  className="cursor-pointer px-4 py-2 hover:bg-gray-100 hover:dark:bg-black-theme-light flex items-center gap-2 border-2 border-b-custom-lightgray dark:border-b-slate-900"
+                  className="cursor-pointer px-4 py-2 hover:bg-gray-100 hover:dark:bg-black-theme-light flex items-center gap-2 border-2 border-b-custom-lightgray dark:border-b-slate-900 dark:bg-gray-500"
                 >
                   <Image src={category.icon} alt={`${category.name} icon`} width={20} height={20} />
                   {category.name}
@@ -173,14 +174,14 @@ const DetailsEntryModal: React.FC<DetailsEntryModalProps> = ({ onClose, onAddExp
           ) : (
             <button
               onClick={toggleCategoryMenu}
-              className="hover:brightness-110 font-normal px-4 py-2 rounded-lg cursor-pointer button-linear-gradient-second border-t border-custom-darkgray w-full drop-shadow-2xl button-inner-shadow font-poppins text-white text-sm"
+              className="hover:brightness-110 dark:border-white dark:border-2 font-normal px-4 py-2 rounded-lg cursor-pointer button-linear-gradient-second border-t border-custom-darkgray w-full drop-shadow-2xl button-inner-shadow font-poppins text-white text-sm"
             >
               Set Category
             </button>
           )}
 
           <button
-            className="hover:brightness-110 w-full border-t border-custom-sky-blue button-linear-gradient rounded-xl py-2 drop-shadow-2xl button-inner-shadow font-poppins text-white text-sm"
+            className="hover:brightness-110 dark:border-custom-sky-blue dark:border-2 w-full border-t border-custom-sky-blue button-linear-gradient rounded-xl py-2 drop-shadow-2xl button-inner-shadow font-poppins text-white text-sm"
             onClick={handleSubmit}
           >
             Add Expense

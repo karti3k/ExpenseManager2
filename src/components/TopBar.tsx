@@ -19,7 +19,7 @@ interface TopBarProps {
 const TopBar: React.FC<TopBarProps> = ({ username, totalIncome, totalExpense }) => {
     return (
         <header className='absolute z-10 w-full'>
-            <nav className='w-full h-10 bg-custom-gradient dark:bg-black text-white flex items-center justify-between px-14'>
+            <nav className='w-full h-10 bg-custom-gradient dark:bg-black-theme-dark text-white flex items-center justify-between px-14'>
                 <h1 className='pb-2 drop-shadow-3xl text-3xl'>Expense Manager</h1>
                 <ul className='font-poppins text-md flex font-light'>
                     <li className='flex gap-1 hover:cursor-pointer ml-8 drop-shadow-lg'><Image src={DarkModeIcon} alt='change theme:' width={14} height={14} className='icon-filter-white'></Image>Theme</li>
