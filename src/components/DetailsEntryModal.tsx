@@ -12,6 +12,7 @@ import ShoppingIcon from '@/assets/Shopping.png';
 import { startOfMonth, endOfMonth } from 'date-fns';
 import ChooseDateIcon from '@/assets/ChooseDate.svg';
 import AddDetailsIcon from '@/assets/AddDetailsIcon.svg'
+import Notification from './Notification';
 
 type Category = 'Food' | 'Entertainment' | 'Cashback' | 'Shopping';
 
@@ -27,6 +28,8 @@ const DetailsEntryModal: React.FC<DetailsEntryModalProps> = ({ onClose, onAddExp
   const [isCategoryMenuOpen, setIsCategoryMenuOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<Category | ''>('');
   const modalContainerRef = useRef<HTMLDivElement>(null);
+  const [showNotification, setShowNotification] = useState(false);
+  const [notificationMessage, setNotificationMessage] = useState('');
 
   const categories = [
     { name: 'Food', icon: FoodIcon },
@@ -71,15 +74,20 @@ const DetailsEntryModal: React.FC<DetailsEntryModalProps> = ({ onClose, onAddExp
       onAddExpense({ amount, date: isoDate, details, category: selectedCategory });
       handleClose();
     } else {
-      alert('Please fill in all required fields.');
+      setNotificationMessage('Please fill in all required fields.');
+      setShowNotification(true);
     }
+  };
+
+  const handleCloseNotification = () => {
+    setShowNotification(false);
   };
 
   return (
     <div className="w-1/2 inset-0 flex justify-center items-center font-poppins">
       <div
         ref={modalContainerRef}
-        className="p-6 pb-4 pt-16 w-80 relative bg-white/65 dark:bg-black-theme-dark/65 rounded-lg shadow backdrop-blur-sm border-2 border-white dark:border-black-theme-very-light"
+        className="p-6 pb-4 pt-16 w-80 relative bg-white/65 dark:bg-black-theme-light/95 rounded-lg shadow backdrop-blur-sm border-2 border-white dark:border-black-theme-very-light"
       >
         <button onClick={handleClose} className="absolute top-6 right-6">
           <Image src={CloseIcon} alt="Close" width={25} height={25} className="icon-filter-red" />
@@ -112,7 +120,7 @@ const DetailsEntryModal: React.FC<DetailsEntryModalProps> = ({ onClose, onAddExp
                   type="number"
                   value={amount}
                   onChange={handleAmountChange}
-                  className="bg-white dark:bg-black w-full pl-10 pr-3 py-2 border rounded-lg text-gray-700 shadow"
+                  className="bg-white dark:bg-black w-full pl-10 pr-3 py-2 border rounded-lg text-gray-700 dark:text-white shadow"
                   placeholder="Enter amount in RS"
                 />
               </div>
@@ -178,6 +186,13 @@ const DetailsEntryModal: React.FC<DetailsEntryModalProps> = ({ onClose, onAddExp
             Add Expense
           </button>
         </div>
+        {showNotification && (
+          <Notification
+            message={notificationMessage}
+            type="error"
+            onClose={handleCloseNotification}
+          />
+        )}
       </div>
     </div>
   );

@@ -12,6 +12,8 @@ import ClockIcon from '@/assets/Clock.svg';
 import DeleteIcon from '@/assets/Delete_Historyicon.svg';
 import MoneyInIcon from '@/assets/MoneyIn.svg';
 import MoneyOutIcon from '@/assets/MoneyOut.svg';
+import Notification from './Notification';
+import ConfirmationBox from './ConfirmationBox';
 
 type Category = 'Food' | 'Entertainment' | 'Cashback' | 'Shopping';
 
@@ -39,6 +41,9 @@ const ExpenseContainer: React.FC<ExpenseContainerProps> = ({ username, onTransac
   const [expenses, setExpenses] = useState<{ amount: number; date: string; details: string; category: Category; time: string }[]>([]);
   const [view, setView] = useState<'expenses' | 'comingSoon'>('expenses');
   const [chartUrl, setChartUrl] = useState<string | null>(null);
+  const [notification, setNotification] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
+  const [isConfirmationOpen, setIsConfirmationOpen] = useState(false);
+  const [expenseToDelete, setExpenseToDelete] = useState<number | null>(null);
 
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
@@ -52,39 +57,35 @@ const ExpenseContainer: React.FC<ExpenseContainerProps> = ({ username, onTransac
 
   const fetchCharts = async () => {
     if (username) {
-      // fetch(`http://localhost/project/ExpenseManager2/phpscripts/charts.php?username=${username}`)
-      fetch(`http://localhost/expscripts/charts.php?username=${username}`)
-      .then(response => response.json())
-        .then(result => {
-          if (result.success) {
-            setChartUrl(result.chart_url); // Get the chart URL from the backend
-          } else {
-            console.error('Failed to fetch chart:', result.message);
+      try {
+        const response = await fetch(`http://localhost/expscripts/charts.php?username=${username}`);
+        const result = await response.json();
+        if (result.success) {
+          setChartUrl(result.chart_url);
+        } else {
+            setNotification({ message: `Failed to fetch chart: ${result.message}`, type: 'error' });
           }
-        })
-        .catch(error => {
+        } catch (error) {
+          setNotification({ message: 'Error fetching chart.', type: 'error' });
           console.error('Error fetching chart:', error);
-        });
-    }
-  }
+        }
+      }
+    };
   // Fetch transactions from the backend
   const fetchTransactions = async () => {
-    if (!username) return; // Do not fetch if username is not available
+    if (!username) return;
 
     try {
       const response = await fetch(`http://localhost/expscripts/transactions.php?username=${username}`);
-      // const response = await fetch(`http://localhost/project/ExpenseManager2/phpscripts/transactions.php?username=${username}`);
       const result = await response.json();
 
       if (result.success) {
-        setExpenses(result.data);  // This should be an array of transactions
+        setExpenses(result.data);
       } else {
-        //alert('Failed to fetch transactions');
-        //console.error('Failed to fetch transactions:', result);
-        console.log("message: ",result.message);
+        setNotification({ message: `Failed to fetch transactions: ${result.message}`, type: 'error' });
       }
     } catch (error) {
-      alert('Error fetching transactions');
+      setNotification({ message: 'Error fetching transactions.', type: 'error' });
       console.error('Error fetching transactions:', error);
     }
   };
@@ -113,66 +114,67 @@ const ExpenseContainer: React.FC<ExpenseContainerProps> = ({ username, onTransac
     const result = await response.json();
 
     if (result.success) {
-      alert('Transaction added successfully');
-      fetchTransactions();  // Refresh the list of transactions after a successful addition
+      setNotification({ message: 'Transaction added successfully.', type: 'success' });
+      fetchTransactions();
       fetchCharts();
-      onTransactionSuccess(); // Notify the MainPage that a transaction was added
-      toggleModal();  // Close the modal after a successful transaction
+      onTransactionSuccess();
+      toggleModal();
     } else {
-      alert(result.message || 'Failed to add transaction');
+      setNotification({ message: `Failed to add transaction: ${result.message}`, type: 'error' });
     }
   } catch (error) {
+    setNotification({ message: 'Error adding transaction.', type: 'error' });
     console.error('Error adding transaction:', error);
-    alert('Error adding transaction');
   }
 };
 
 
 const handleDeleteExpense = async (index: number) => {
-  const confirmed = window.confirm('Are you sure you want to delete this transaction?');
+  setExpenseToDelete(index);
+  setIsConfirmationOpen(true);
+};
   
-  if (confirmed) {
-    // Retrieve the expense details to delete
-    const expenseToDelete = expenses[index];
+const confirmDelete = async () => {
+  if (expenseToDelete !== null) {
+    const expenseToDeleteDetails = expenses[expenseToDelete];
 
     try {
-      // const response = await fetch('http://localhost/project/ExpenseManager2/phpscripts/deletetransactions.php',{
-        const response = await fetch('http://localhost/expscripts/deletetransactions.php',{
+      const response = await fetch('http://localhost/expscripts/deletetransactions.php', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          amount: expenseToDelete.amount,
-          date: expenseToDelete.date,
-          time: expenseToDelete.time,
-          category: expenseToDelete.category,
-          username: username, // Assuming `username` is passed as a prop to the component
+          amount: expenseToDeleteDetails.amount,
+          date: expenseToDeleteDetails.date,
+          time: expenseToDeleteDetails.time,
+          category: expenseToDeleteDetails.category,
+          username: username,
         }),
       });
 
       const result = await response.json();
 
       if (result.success) {
-        alert('Transaction deleted successfully');
+        setNotification({ message: 'Transaction deleted successfully.', type: 'success' });
         fetchTransactions();
         fetchCharts();
-        onTransactionSuccess(); // Notify the MainPage that a transaction was added
+        onTransactionSuccess();
       } else {
-        alert(result.message || 'Failed to delete transaction');
-        console.error('Failed to delete transaction:', result.message);
-        fetchTransactions();
-        fetchCharts();
-        onTransactionSuccess(); // Notify the MainPage that a transaction was added
+        setNotification({ message: `Failed to delete transaction: ${result.message}`, type: 'error' });
       }
     } catch (error) {
-      fetchTransactions();
-      fetchCharts();
-      onTransactionSuccess(); // Notify the MainPage that a transaction was added
-      console.error('Catched Error deleting transaction:',error);
-      alert('Catched Error deleting transaction');
+      setNotification({ message: 'Error deleting transaction.', type: 'error' });
+      console.error('Error deleting transaction:', error);
+    } finally {
+      setIsConfirmationOpen(false);
+      setExpenseToDelete(null);
     }
   }
+};
+const cancelDelete = () => {
+  setIsConfirmationOpen(false);
+  setExpenseToDelete(null);
 };
 
   const formatDate = (date: string) => {
@@ -280,6 +282,21 @@ const handleDeleteExpense = async (index: number) => {
         </div>
       </div>
       {isModalOpen && ( <div className='flex justify-center items-end absolute  w-full h-screen right-[0%] pb-14'><DetailsEntryModal onClose={toggleModal} onAddExpense={handleAddExpense} /></div>)}
+
+      {notification && (
+        <Notification
+          message={notification.message}
+          type={notification.type}
+          onClose={() => setNotification(null)}
+        />
+      )}
+      {isConfirmationOpen && (
+        <ConfirmationBox
+          message='Are you sure you want to delete this transaction?'
+          onConfirm={confirmDelete}
+          onCancel={cancelDelete}
+        />
+      )}
     </div>
   );
 };
