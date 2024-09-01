@@ -29,11 +29,15 @@ if ($postData) {
     // Query to check if the username already exists
     $existingUsers = readData($reference_table);
     $usernameExists = false;
-
+    $emailexists = false;
     if ($existingUsers) {
         foreach ($existingUsers as $user) {
             if ($user['username'] === $username) {
                 $usernameExists = true;
+                break;
+            }
+            if ($user['email'] === $email) {
+                $emailExists = true;
                 break;
             }
         }
@@ -41,6 +45,8 @@ if ($postData) {
 
     if ($usernameExists) {
         echo json_encode(['success' => false, 'message' => 'Username already exists']);
+    }else if($emailexists){
+        echo json_encode(['success' => false, 'message' => 'Email already exists']);
     } else {
         // Hash the password before storing it
         $postData = [
