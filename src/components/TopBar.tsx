@@ -19,7 +19,7 @@ interface TopBarProps {
 const TopBar: React.FC<TopBarProps> = ({ username, totalIncome, totalExpense }) => {
     return (
         <header className='absolute z-10 w-full'>
-            <nav className='w-full h-10 bg-custom-gradient dark:bg-black-theme-dark text-white flex items-center justify-between md:px-14 px-8'>
+            <nav className='w-full h-14 md:h-10 bg-custom-gradient dark:bg-black-theme-dark text-white flex items-center justify-between md:px-14 px-8'>
                 <h1 className='pb-2 drop-shadow-3xl md:text-3xl text-lg'>Expense Manager</h1>
                 <ul className='font-poppins md:text-md text-xs flex font-light'>
                     {/* <li className='flex gap-1 hover:cursor-pointer ml-8 drop-shadow-lg'><Image src={DarkModeIcon} alt='change theme:' width={14} height={14} className='icon-filter-white'></Image>Theme</li> */}
@@ -30,7 +30,7 @@ const TopBar: React.FC<TopBarProps> = ({ username, totalIncome, totalExpense }) 
                 </ul>
             </nav>
 
-            <div className='w-full text-xs md:text-lg h-20 bg-white dark:bg-black-theme-dark rounded-b-xl drop-shadow-lg shadow-sm flex font-poppins'>
+            <div className='w-full text-xs md:text-lg md:h-20 h-24 bg-white dark:bg-black-theme-dark rounded-b-xl drop-shadow-lg shadow-sm flex font-poppins'>
                 <div className='w-1/3 flex flex-col justify-center'>
                     <div className='flex justify-center text-custom-darkgray'>This Month <span className='pl-1 text-custom-red font-semibold'>Expense</span></div> 
                     <div className='flex text-lg justify-center font-bold text-custom-red'>{totalExpense !== null ? `₹${totalExpense}` : '₹0'}</div>

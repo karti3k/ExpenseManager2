@@ -30,13 +30,13 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
         }
     }, [password, isSignUp]);
 
-    useEffect(() => {
-        const token = localStorage.getItem('authToken');
-        if (token) {
-            // Verify the token with your backend or simply use it to avoid login
-            onLoginSuccess(localStorage.getItem('rememberedUsername') || '');
-        }
-    }, []);
+    // useEffect(() => {
+    //     const token = localStorage.getItem('authToken');
+    //     if (token) {
+    //         // Verify the token with your backend or simply use it to avoid login
+    //         onLoginSuccess(localStorage.getItem('rememberedUsername') || '');
+    //     }
+    // }, []);
 
     const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setPassword(e.target.value);

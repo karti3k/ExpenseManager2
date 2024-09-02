@@ -263,7 +263,8 @@ const cancelDelete = () => {
           )
         ) : (
           <div className='flex items-center justify-center'>
-            <p className='text-center text-gray-500 dark:text-white w-[55%] h-[20%] flex justify-center items-center'>{chartUrl ? (
+            <p className='lg:hidden flex text-white pt-28 mt-28'><span>Currently unavailable for mobile devices!</span></p>
+            <p className='hidden lg:-mt-28 lg:w-[80%] lg:h-[20%] lg:flex justify-center items-center lg:items-start'>{chartUrl ? (
               <img src={`${chartUrl}`} alt="Expense Chart" />
             ) : (
               <span>Please add expenses first!</span>
