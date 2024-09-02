@@ -20,7 +20,7 @@ const Notification: React.FC<NotificationProps> = ({ message, type, onClose }) =
     }, [onClose]);
 
     return (
-         <div className={`fixed top-20 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50 max-w-sm w-[90%] p-4 rounded-lg shadow-lg
+         <div className={`fixed lg:top-20 md:top-40 top-12 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50 max-w-sm lg:w-[90%] p-4 rounded-lg shadow-lg
             ${type === 'success' ? 'bg-white border border-black text-green-700' : 'text-red-500 bg-white border border-black'}`}>
             <div className="flex justify-between items-center">
                 <p className="text-sm font-medium">{message}</p>

@@ -10,7 +10,7 @@ const ConfirmationBox: React.FC<ConfirmationBoxProps> = ({ message, onConfirm, o
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-70 z-50">
       <div className="mt-4 bg-white dark:bg-black-theme-dark p-6 rounded-lg shadow-lg">
-        <p className="text-lg text-custom-darkgray mb-4">{message}</p>
+        <p className="text-sm md:text-lg text-custom-darkgray mb-4">{message}</p>
         <div className="flex justify-end space-x-4">
           <button 
             onClick={onCancel} 

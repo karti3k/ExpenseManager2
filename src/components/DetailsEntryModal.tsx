@@ -5,7 +5,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import AddCategoryicon from '@/assets/add_category_icon.svg';
 import CloseIcon from '@/assets/CloseIcon.svg';
 import RupeesIcon from '@/assets/RuppesIcon.svg';
-import FoodIcon from '@/assets/Food.svg';
+import FoodIcon from '@/assets/Food.png';
 import EntertainmentIcon from '@/assets/Entertainment.svg';
 import CashbackIcon from '@/assets/Cashback.png';
 import ShoppingIcon from '@/assets/Shopping.png';
@@ -85,17 +85,17 @@ const DetailsEntryModal: React.FC<DetailsEntryModalProps> = ({ onClose, onAddExp
   };
 
   return (
-    <div className="w-1/2 inset-0 flex justify-center items-center font-poppins">
+    <div className="lg:w-1/2 h-full lg:h-[62%] w-full md:bg-black/70 dark:bg-black/80 bg-custom-sky-blue/30 lg:bg-black/0 inset-0 flex justify-center items-center font-poppins">
       <div
         ref={modalContainerRef}
-        className="p-6 pb-4 pt-16 w-80 relative bg-white/65 dark:bg-black-theme-light/95 rounded-lg shadow backdrop-blur-sm border-2 border-white dark:border-black-theme-very-light"
+        className="p-6 pb-4 pt-16 lg:w-80 md:w-1/2 w-[82%] md:h-[40%] h-[45%] lg:h-full relative bg-white/65 dark:bg-black-theme-light/95 rounded-lg shadow backdrop-blur-sm border-2 border-white dark:border-custom-sky-blue dark:border"
       >
-        <button onClick={handleClose} className="absolute top-6 right-6">
-          <Image src={CloseIcon} alt="Close" width={25} height={25} className="icon-filter-red" />
+        <button onClick={handleClose} className="bg-white rounded-full absolute top-6 right-6">
+          <Image src={CloseIcon} alt="Close" width={25} height={25} className="icon-filter-redish" />
         </button>
 
         {isCategoryMenuOpen ? (
-          <div className="mb-4 max-h-40 overflow-y-auto bg-white dark:bg-black-theme-very-light border rounded-lg shadow-lg dark:text-white">
+          <div className="mb-4 mt-10 lg:mt-0 max-h-40 overflow-y-auto bg-white dark:bg-black-theme-very-light border rounded-lg shadow-lg dark:text-white">
             <ul>
               {categories.map((category) => (
                 <li
@@ -111,7 +111,7 @@ const DetailsEntryModal: React.FC<DetailsEntryModalProps> = ({ onClose, onAddExp
           </div>
         ) : (
           <>
-            <div className="mb-4 relative border-2 border-white dark:border-black-theme-very-light rounded-lg">
+            <div className="mb-4 mt-8 lg:mt-0 relative border-2 border-white dark:border-black-theme-very-light rounded-lg">
               <label className="block text-gray-700 hidden">Amount</label>
               <div className="flex items-center">
                 <span className="absolute left-3">
@@ -163,7 +163,7 @@ const DetailsEntryModal: React.FC<DetailsEntryModalProps> = ({ onClose, onAddExp
           </>
         )}
 
-        <div className="flex justify-between items-center gap-4 mt-4">
+        <div className="flex justify-between items-center gap-4 lg:mt-4 mt-8">
           {selectedCategory ? (
             <button
               onClick={toggleCategoryMenu}

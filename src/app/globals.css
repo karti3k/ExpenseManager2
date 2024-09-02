@@ -51,3 +51,6 @@
 .button-linear-gradient-third {
   background: linear-gradient(180deg, rgba(54, 63, 83, 0.00) 0%, rgba(54, 63, 83, 0.75) 14.58%);
 }
+.icon-filter-redish {
+  filter: invert(9%) sepia(65%) saturate(7487%) hue-rotate(-4deg) brightness(103%) contrast(87%);
+}

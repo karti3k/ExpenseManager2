@@ -4,7 +4,7 @@ import ExpensesBttnIcon from '@/assets/expenses-bttn-icon.svg';
 import GraphBttnIcon from '@/assets/graph_bttn-icon.svg';
 import PlusIcon from '@/assets/plus.svg';
 import DetailsEntryModal from './DetailsEntryModal';
-import FoodIcon from '@/assets/Food.svg';
+import FoodIcon from '@/assets/Food.png';
 import EntertainmentIcon from '@/assets/Entertainment.svg';
 import CashbackIcon from '@/assets/Cashback.png';
 import ShoppingIcon from '@/assets/Shopping.png';
@@ -29,7 +29,7 @@ const categoryStyles: Record<Category, string> = {
 Food: 'bg-[#E2DBFF] border-4 border-[#ee82ee59] dark:bg-[#e366b1]',
 Entertainment: 'bg-[#FFE4DB] border-4 border-[#e4893559] dark:bg-[#c68863]',
 Cashback: 'bg-[#DCFACE] border-4 border-[#44d24459] dark:bg-[#7bb662]',
-Shopping: 'bg-[#FFF5DB] border-4 border-[#d2cd4459] dark:bg-[#d3a932]',
+Shopping: 'bg-[#FFF5DB] border-4 border-[#d2cd4459] dark:bg-[#d6b85a]',
 Income: 'bg-[#DCFACE] border-4 border-[#44d24459] dark:bg-[#7bb662]',
 };
 
@@ -213,9 +213,9 @@ const cancelDelete = () => {
   });
 
   return (
-    <div className='font-poppins w-full h-screen bg-[#E9F7FF] dark:bg-black-theme-very-light px-28 flex flex-col justify-end items-center'>
-      <div className='bg-white dark:border-t-2 dark:border-white dark:bg-black-theme-dark w-full h-[70%] rounded-3xl shadow-inner-custom flex flex-col justify-between'>
-        <div className='p-6 px-12 overflow-y-auto '>
+    <div className='font-poppins w-full h-screen bg-[#E9F7FF] dark:bg-black-theme-very-light md:px-28 flex flex-col justify-end items-center'>
+      <div className='bg-white dark:border-t-2 dark:border-white dark:bg-black-theme-dark w-full lg:h-[70%] md:h-[81%] h-[76%] rounded-3xl shadow-inner-custom flex flex-col justify-between'>
+        <div className='p-6 md:px-12 py-12 lg:py-6 overflow-y-auto '>
         {view === 'expenses' ? (
           expenses.length === 0 ? (
             <p className='text-center text-gray-500 dark:text-white pt-40 opacity-40'>No expenses added yet!</p>
@@ -223,7 +223,7 @@ const cancelDelete = () => {
             sortedDates.map((date) => (
               <div key={date}>
                 <h2 className='text-lg font-semibold text-custom-darkgray'>{date}</h2>
-                <ul className='mb-4'>
+                <ul className='lg:mb-4 mb-8'>
                   {groupedExpenses[date]
                     .sort((a, b) => {
                       const timeA = new Date(`${a.date} ${a.time}`).getTime();
@@ -236,23 +236,23 @@ const cancelDelete = () => {
                       );
                       const icon = categoryIcons[expense.category];
                       const isCashback = expense.category === 'Cashback' ||  expense.category === 'Income';
-                      const amountClass = isCashback ? 'dark:text-green-300 text-green-500' : 'dark:text-red-200 text-red-500';
+                      const amountClass = isCashback ? 'dark:text-green-300 text-green-500' : 'dark:text-red-100 text-red-500';
                       const amountIcon = isCashback ? MoneyInIcon : MoneyOutIcon;
                       const listItemStyle = categoryStyles[expense.category];
 
                       return (
-                        <li key={groupIndex} className={`mt-2 flex justify-between items-center py-2 rounded-full px-2 ${listItemStyle}`}>
+                        <li key={groupIndex} className={`mt-2 flex justify-between items-center lg:py-2 py-2 rounded-full px-2 ${listItemStyle}`}>
                           <div className='flex items-center'>
-                            <Image src={icon} alt={`${expense.category} icon`} width={28} height={28} className='mr-2' />
-                            <p className='w-60 font-semibold dark:text-white'>{expense.category}</p>
-                            <p className='w-80 dark:text-white'><strong className='text-black'>Details:</strong> {expense.details}</p>
-                            <div className='flex gap-2'><Image src={ClockIcon} width={17} height={17} alt='clock'></Image><p className='w-40'>{expense.time}</p></div>
-                            <p className={`${amountClass} flex items-center`}>
+                            <Image src={icon} alt={`${expense.category} icon`} width={28} height={28} className='mr-2 drop-shadow-xl' />
+                            <p className='lg:w-60 text-sm md:text-lg md:pr-8 pr-4 lg:pr-0 font-light md:font-semibold dark:text-white'>{expense.category}</p>
+                            <p className='hidden lg:flex w-80 dark:text-white'><strong className='text-black pr-4'>Details:</strong> {expense.details}</p>
+                            <div className='flex gap-2'><Image src={ClockIcon} width={17} height={17} alt='clock' className='hidden md:flex'></Image><p className='lg:w-75 pr-4 md:pr-12 text-xs md:text-lg lg:text-md'>{expense.time}</p></div>
+                            <p className={`${amountClass} drop-shadow-xl text-sm md:text-lg flex items-center`}>
                               <strong>Rs {expense.amount}</strong>
                               <Image src={amountIcon} alt={`${isCashback ? 'MoneyIn' : 'MoneyOut'}Icon`} width={24} height={24} className='ml-2' />
                             </p>
                           </div>
-                          <button onClick={() => handleDeleteExpense(expenseIndex)} className=""><Image className='icon-filter-red' src={DeleteIcon} alt='delete' width={20} height={20}></Image></button>
+                          <button onClick={() => handleDeleteExpense(expenseIndex)} className=""><Image className='drop-shadow-2xl icon-filter-redish' src={DeleteIcon} alt='delete' width={20} height={20}></Image></button>
                         </li>
                       );
                     })}
@@ -272,7 +272,7 @@ const cancelDelete = () => {
         )}
         </div>
         <div className='w-full h-12 bg-[#E9F7FF] rounded-xl flex justify-center items-end'>
-          <button onClick={() => setView('expenses')} className='hover:brightness-110 flex gap-2 dark:border-custom-sky-blue dark:border-2 justify-center items-center w-1/2 h-12 border-t border-custom-sky-blue dark:border-black-theme-dark bg-custom-gradient dark:bg-black-theme-dark rounded-l-xl drop-shadow-2xl button-inner-shadow font-poppins text-white text-lg'>
+          <button onClick={() => setView('expenses')} className='hover:brightness-110 flex gap-2 dark:border-custom-sky-blue dark:border-t justify-center items-center w-1/2 h-12 border-t border-custom-sky-blue dark:border-black-theme-dark bg-custom-gradient dark:bg-black-theme-dark rounded-l-xl drop-shadow-2xl button-inner-shadow font-poppins text-white text-lg'>
             <Image src={ExpensesBttnIcon} alt='E-icon' width={35} height={35}></Image> Expenses
           </button>
 
@@ -280,7 +280,7 @@ const cancelDelete = () => {
           </button>
 
           <button onClick={() => setView('comingSoon')}
-  className='hover:brightness-110 flex gap-2 justify-center items-center w-1/2 h-12 dark:border-custom-sky-blue dark:border-2 border-t border-custom-sky-blue dark:border-black-theme-dark bg-custom-gradient dark:bg-black-theme-dark rounded-r-xl drop-shadow-2xl button-inner-shadow font-poppins text-white text-lg cursor-pointer'
+  className='hover:brightness-110 flex gap-2 justify-center items-center w-1/2 h-12 dark:border-custom-sky-blue dark:border-t border-t border-custom-sky-blue dark:border-black-theme-dark bg-custom-gradient dark:bg-black-theme-dark rounded-r-xl drop-shadow-2xl button-inner-shadow font-poppins text-white text-lg cursor-pointer'
 >
   <Image src={GraphBttnIcon} alt='G-icon' width={25} height={25} /> 
   Graph
