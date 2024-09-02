@@ -245,12 +245,12 @@ const cancelDelete = () => {
   return (
     <div className='font-poppins w-full h-screen bg-[#E9F7FF] dark:bg-black-theme-very-light md:px-28 flex flex-col justify-end items-center'>
       <button
-          className="bg-white dark:bg-black text-[#3997CB] dark:text-white font-medium py-1 px-2 mb-2 rounded-full shadow-md text-sm hover:opacity-70 ml-4 border-4 border-[#3997CB89]"
+          className="bg-white dark:bg-black text-[#3997CB] dark:text-white font-medium py-1 px-2 mb-4 rounded-full shadow-md text-sm hover:opacity-70 ml-4 border-4 border-[#3997CB89]"
           onClick={downloadCSV}
         >
           Download Transactions
         </button>
-      <div className='bg-white dark:border-t-2 dark:border-white dark:bg-black-theme-dark w-full lg:h-[70%] md:h-[81%] h-[76%] rounded-3xl shadow-inner-custom flex flex-col justify-between'>
+      <div className='bg-white dark:border-t-2 dark:border-white dark:bg-black-theme-dark w-full lg:h-[68%] md:h-[81%] h-[76%] rounded-3xl shadow-inner-custom flex flex-col justify-between'>
         <div className='p-6 md:px-12 py-12 lg:py-6 overflow-y-auto '>
         {view === 'expenses' ? (
           expenses.length === 0 ? (
