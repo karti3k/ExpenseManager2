@@ -30,6 +30,13 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
         }
     }, [password, isSignUp]);
 
+    useEffect(() => {
+        const token = localStorage.getItem('authToken');
+        if (token) {
+            // Verify the token with your backend or simply use it to avoid login
+            onLoginSuccess(localStorage.getItem('rememberedUsername') || '');
+        }
+    }, []);
 
     const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setPassword(e.target.value);
@@ -56,14 +63,6 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
-        if (!isSignUp && rememberMe) {
-            localStorage.setItem('rememberedUsername', username);
-        }
-
-        // const url = isSignUp
-        //     ? 'http://localhost/project/ExpenseManager2/phpscripts/signup.php'
-        //     : 'http://localhost/project/ExpenseManager2/phpscripts/signin.php';
-
         const url = isSignUp
             ? 'http://localhost/expscripts/signup.php'
             : 'http://localhost/expscripts/signin.php';
@@ -71,6 +70,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
         const body = isSignUp
             ? JSON.stringify({ email, username, password })
             : JSON.stringify({ username, password });
+
         try {
             const response = await fetch(url, {
                 method: 'POST',
@@ -85,20 +85,24 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
             }
 
             const data = await response.json();
-            console.log(data);
 
             if (data.success) {
                 setNotification({
-                    message: `${isSignUp ? 'Sign Up' : 'Sign In'} successful ${isSignUp ? `with email: ${data.email}` : `by ${data.username}`}`,
+                    message: `${isSignUp ? 'Sign Up' : 'Sign In'} successful!`,
                     type: 'success',
                 });
-                if (isSignUp) {
+
+                if (!isSignUp) {
+                    localStorage.setItem('authToken', data.token); // Save token to localStorage
+                    if (rememberMe) {
+                        localStorage.setItem('rememberedUsername', data.username); // Save username if "Remember me" is checked
+                    }
+                    onLoginSuccess(data.username); // Call the login success function with the username
+                } else {
                     setIsSignUp(false);
                     setEmail('');
                     setUsername('');
                     setPassword('');
-                } else {
-                    onLoginSuccess(data.username);
                 }
             } else {
                 setNotification({
@@ -111,6 +115,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
             setNotification({ message: 'An error occurred. Please try again.', type: 'error' });
         }
     };
+
  
     useEffect(() => {
         const storedUsername = localStorage.getItem('rememberedUsername');
