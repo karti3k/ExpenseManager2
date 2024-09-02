@@ -60,26 +60,32 @@ foreach ($category_totals as $category => $amount) {
 
 // Format the data for QuickChart
 $data = array_values($category_totals);
+$labels = array_keys($category_totals);
 
+// Create the chart configuration for QuickChart
 $chartData = [
-    'type' => 'pie',
+    'type' => 'outlabeledPie',
     'data' => [
+        'labels' => $labels,
         'datasets' => [
-            ['data' => $data]
-        ],
-        'labels' => $category_percentages // Use formatted labels with percentages
+            [
+                'backgroundColor' => ['#FF3784', '#36A2EB', '#4BC0C0', '#F77825', '#9966FF'],
+                'data' => $data
+            ]
+        ]
     ],
     'options' => [
         'plugins' => [
-            'datalabels' => [
-                'display' => false // Disable datalabels plugin to remove text on the chart
-            ]
-        ],
-        'legend' => [
-            'display' => true, // Ensure legend is displayed
-            'labels' => [
-                'fontColor' => $text_color, // Set text color based on theme
-                'usePointStyle' => true, // Optional: Use point style for better visual representation
+            'legend' => false,
+            'outlabels' => [
+                'text' => '%l %p',
+                'color' => $text_color,
+                'stretch' => 35,
+                'font' => [
+                    'resizable' => true,
+                    'minSize' => 12,
+                    'maxSize' => 18
+                ]
             ]
         ]
     ]
