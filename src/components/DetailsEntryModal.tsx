@@ -85,7 +85,7 @@ const DetailsEntryModal: React.FC<DetailsEntryModalProps> = ({ onClose, onAddExp
   };
 
   return (
-    <div className="lg:w-1/2 h-full lg:h-[62%] w-full md:bg-black/70 dark:bg-black/80 bg-custom-sky-blue/30 lg:dark:bg-black/0 inset-0 flex justify-center items-center font-poppins">
+    <div className="lg:w-1/2 h-full lg:h-[62%] w-full md:dark:bg-black/70 dark:bg-black/80 bg-custom-sky-blue/30 lg:bg-custom-sky-blue/0 lg:dark:bg-black/0 inset-0 flex justify-center items-center font-poppins">
       <div
         ref={modalContainerRef}
         className="p-6 pb-4 pt-16 lg:w-80 md:w-1/2 w-[82%] md:h-[40%] h-max lg:h-full relative bg-white/65 dark:bg-black-theme-light/95 rounded-lg shadow backdrop-blur-sm border-2 border-white dark:border-custom-sky-blue dark:border"
