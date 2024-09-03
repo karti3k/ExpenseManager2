@@ -2,32 +2,55 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
-}
-
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
-}
-
 @layer utilities {
   .text-balance {
     text-wrap: balance;
   }
+  .text-stroke {
+    text-shadow: 
+      1px 1px 0 #32B7FF, 
+      -1px -1px 0 #32B7FF, 
+      4px -1px 0 #32B7FF, 
+      -1px 1px 0 #32B7FF;
+  }
+}
+
+.icon-filter-gray {
+  filter: invert(37%) sepia(0%) saturate(0%) hue-rotate(186deg) brightness(94%) contrast(87%);
+}
+.icon-filter-white {
+  filter: invert(100%) brightness(100%) contrast(100%);
+}
+.shadow-inner-custom {
+  box-shadow: inset 0 2px 4px 2px rgba(57, 57, 57, 0.336);
+}
+.button-inner-shadow {
+  box-shadow: 0px -6px 4px 0px rgba(0, 0, 0, 0.25) inset;
+}
+.button-linear-gradient{
+  background: linear-gradient(180deg, rgba(42, 161, 226, 0.00) 0%, rgba(42, 161, 226, 0.75) 14.58%);
+}
+.icon-filter-green {
+  filter: invert(87%) sepia(17%) saturate(335%) hue-rotate(62deg) brightness(103%) contrast(95%);
+}
+.icon-filter-blue {
+  filter: invert(68%) sepia(40%) saturate(5246%) hue-rotate(163deg) brightness(88%) contrast(94%);
+}
+.icon-filter-red {
+  filter: invert(9%) sepia(65%) saturate(7487%) hue-rotate(-3deg) brightness(73%) contrast(57%);
+}
+.icon-filter-dark-bluish {
+  filter: invert(60%) sepia(20%) saturate(7400%) hue-rotate(200deg) brightness(100%) contrast(70%);
+}
+.trasp-blue{
+  background-color: #32b7ffbb;
+}
+.button-linear-gradient-second {
+  background: linear-gradient(180deg, rgba(147, 147, 147, 0.00) 0%, rgba(147, 147, 147, 0.75) 14.58%);
+}
+.button-linear-gradient-third {
+  background: linear-gradient(180deg, rgba(54, 63, 83, 0.00) 0%, rgba(54, 63, 83, 0.75) 14.58%);
+}
+.icon-filter-redish {
+  filter: invert(9%) sepia(65%) saturate(7487%) hue-rotate(-4deg) brightness(103%) contrast(87%);
 }

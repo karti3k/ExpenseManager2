@@ -8,10 +8,30 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        allison: ['Allison', 'cursive'],
+        inter: ['Inter', 'sans-serif'],
+        poppins: ['var(--font-poppins)', 'sans-serif'],
+      },
       backgroundImage: {
-        "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
-        "gradient-conic":
-          "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
+        'custom-gradient': 'linear-gradient(180deg, rgba(42, 161, 226, 0.43) 40.1%, rgba(42, 161, 226, 0.75) 99.99%, rgba(42, 161, 226, 0.00) 100%)',
+        'custom-gradient-second': 'linear-gradient(180deg, rgba(54, 63, 83, 0.43) 40.1%, rgba(54, 63, 83, 0.75) 99.99%, rgba(54, 63, 83, 0.00) 100%)',
+
+      },
+      colors:{
+        'custom-sky-blue' : '#32B7FF',
+        'custom-darkgray' : '#939393',
+        'custom-blueshade' : '#3997CB',
+        'custom-lightgray' : '#d9d9d9',
+        'custom-red': '#E43540',
+        'custom-green': '#008000',
+        'custom-light-green': '#B7FFB7',
+        'black-theme-dark': '#1e2635',
+        'black-theme-light': '#263045',
+        'black-theme-very-light': '#363f53',
+      },
+      textShadow: {
+        'stroke': '8px 8px 0 #32B7FF, -8px -8px 0 #32B7FF, 8px -8px 0 #32B7FF, -8px 8px 0 #32B7FF',
       },
     },
   },
