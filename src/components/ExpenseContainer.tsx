@@ -63,7 +63,8 @@ const ExpenseContainer: React.FC<ExpenseContainerProps> = ({ username, onTransac
   const fetchCharts = async () => {
     if (username) {
       try {
-        const response = await fetch(`http://localhost/expscripts/charts.php?username=${username}`);
+        const response = await fetch(`http://localhost/project/ExpenseManager2/phpscripts/charts.php?username=${username}`);
+        // const response = await fetch(`http://localhost/expscripts/charts.php?username=${username}`);
         const result = await response.json();
         if (result.success) {
           setChartUrl(result.chart_url);
@@ -81,8 +82,8 @@ const ExpenseContainer: React.FC<ExpenseContainerProps> = ({ username, onTransac
     if (!username) return;
 
     try {
-      const response = await fetch(`http://localhost/expscripts/transactions.php?username=${username}&theme=${theme}`);
-      // const response = await fetch(`http://localhost/project/ExpenseManager2/phpscripts/transactions.php?username=${username}&theme=${theme}`);
+      // const response = await fetch(`http://localhost/expscripts/transactions.php?username=${username}&theme=${theme}`);
+      const response = await fetch(`http://localhost/project/ExpenseManager2/phpscripts/transactions.php?username=${username}&theme=${theme}`);
       const result = await response.json();
 
       if (result.success) {
@@ -108,8 +109,8 @@ const ExpenseContainer: React.FC<ExpenseContainerProps> = ({ username, onTransac
   };
 
   try {
-    // const response = await fetch('http://localhost/project/ExpenseManager2/phpscripts/transactions.php', {
-      const response = await fetch('http://localhost/expscripts/transactions.php', {
+    const response = await fetch('http://localhost/project/ExpenseManager2/phpscripts/transactions.php', {
+      // const response = await fetch('http://localhost/expscripts/transactions.php', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -145,7 +146,8 @@ const confirmDelete = async () => {
     const expenseToDeleteDetails = expenses[expenseToDelete];
 
     try {
-      const response = await fetch('http://localhost/expscripts/deletetransactions.php', {
+      // const response = await fetch('http://localhost/expscripts/deletetransactions.php', {
+      const response = await fetch('http://localhost/project/ExpenseManager2/phpscripts/deletetransactions.php', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -241,7 +243,6 @@ const cancelDelete = () => {
     link.setAttribute('download', 'transactions.csv');
     link.click();
   };
-
   return (
     <div className='font-poppins w-full h-screen bg-[#E9F7FF] dark:bg-black-theme-very-light md:px-28 flex flex-col justify-end items-center'>
       <button
@@ -250,7 +251,7 @@ const cancelDelete = () => {
         >
           Download Transactions
         </button>
-      <div className='bg-white dark:border-t-2 dark:border-white dark:bg-black-theme-dark w-full lg:h-[68%] md:h-[81%] h-[76%] rounded-3xl shadow-inner-custom flex flex-col justify-between'>
+      <div className='bg-white dark:border-t-2 dark:border-white dark:bg-black-theme-dark w-full lg:h-[68%] md:h-[81%] h-[70%] rounded-3xl shadow-inner-custom flex flex-col justify-between'>
         <div className='p-6 md:px-12 py-12 lg:py-6 overflow-y-auto '>
         {view === 'expenses' ? (
           expenses.length === 0 ? (
