@@ -65,7 +65,7 @@ const ExpenseContainer: React.FC<ExpenseContainerProps> = ({ username, onTransac
       try {
         // const response = await fetch(`http://localhost/project/ExpenseManager2/phpscripts/charts.php?username=${username}`);
         // const response = await fetch(`http://localhost/expscripts/charts.php?username=${username}`);
-        const response = await fetch(`http://expmanager.free.nf/phppscripts/charts.php?username=${username}`);
+        const response = await fetch(`https://expmanager.free.nf/phpscripts/charts.php?username=${username}&theme=${theme}`);
         const result = await response.json();
         if (result.success) {
           setChartUrl(result.chart_url);
@@ -84,7 +84,7 @@ const ExpenseContainer: React.FC<ExpenseContainerProps> = ({ username, onTransac
 
     try {
       // const response = await fetch(`http://localhost/expscripts/transactions.php?username=${username}&theme=${theme}`);
-      const response = await fetch(`http://expmanager.free.nf/phpscripts/transactions.php?username=${username}&theme=${theme}`);
+      const response = await fetch(`https://expmanager.free.nf/phpscripts/transactions.php?username=${username}`);
       const result = await response.json();
 
       if (result.success) {
@@ -110,7 +110,7 @@ const ExpenseContainer: React.FC<ExpenseContainerProps> = ({ username, onTransac
   };
 
   try {
-    const response = await fetch('http://expmanager.free.nf/phpscripts/transactions.php', {
+    const response = await fetch('https://expmanager.free.nf/phpscripts/transactions.php', {
       // const response = await fetch('http://localhost/expscripts/transactions.php', {
       method: 'POST',
       headers: {
@@ -148,7 +148,7 @@ const confirmDelete = async () => {
 
     try {
       // const response = await fetch('http://localhost/expscripts/deletetransactions.php', {
-      const response = await fetch('expmanager.free.nf/phpscripts/deletetransactions.php', {
+      const response = await fetch('https://expmanager.free.nf/phpscripts/deletetransactions.php', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
