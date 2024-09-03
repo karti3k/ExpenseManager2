@@ -68,8 +68,8 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
         //     : 'http://localhost/expscripts/signin.php';
 
         const url = isSignUp
-            ? 'http://localhost/project/ExpenseManager2/phpscripts/signup.php'
-            : 'http://localhost/project/ExpenseManager2/phpscripts/signin.php';
+            ? 'http://expmanager.free.nf/phpscripts/signup.php'
+            : 'http://expmanager.free.nf/phpscripts/signin.php';
 
         const body = isSignUp
             ? JSON.stringify({ email, username, password })
