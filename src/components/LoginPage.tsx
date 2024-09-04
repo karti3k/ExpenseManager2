@@ -68,8 +68,8 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
         //     : 'http://localhost/expscripts/signin.php';
 
         const url = isSignUp
-            ? 'http://expmanager.free.nf/phpscripts/signup.php'
-            : 'http://expmanager.free.nf/phpscripts/signin.php';
+    ? ' https://expmanager.vercel.app/api/signup'
+  : ' https://expmanager.vercel.app/api/signin';
 
         const body = isSignUp
             ? JSON.stringify({ email, username, password })
