@@ -64,7 +64,7 @@ const ExpenseContainer: React.FC<ExpenseContainerProps> = ({ username, onTransac
     if (username) {
       try {
         // const response = await fetch(`http://localhost/project/ExpenseManager2/phpscripts/charts.php?username=${username}`);
-        const response = await fetch(`http://localhost/expscripts/api/charts.php?username=${username}&theme=${theme}`);
+        const response = await fetch(`http://localhost/api/charts.php?username=${username}&theme=${theme}`);
         // const response = await fetch(`https://expmanager.free.nf/phpscripts/charts.php?username=${username}&theme=${theme}`);
         const result = await response.json();
         if (result.success) {
@@ -83,7 +83,7 @@ const ExpenseContainer: React.FC<ExpenseContainerProps> = ({ username, onTransac
     if (!username) return;
 
     try {
-      const response = await fetch(`http://localhost/expscripts/api/transactions.php?username=${username}&theme=${theme}`);
+      const response = await fetch(`http://localhost/api/transactions.php?username=${username}&theme=${theme}`);
       // const response = await fetch(`https://expmanager.free.nf/phpscripts/transactions.php?username=${username}`);
       const result = await response.json();
 
@@ -111,7 +111,7 @@ const ExpenseContainer: React.FC<ExpenseContainerProps> = ({ username, onTransac
 
   try {
     // const response = await fetch('https://expmanager.free.nf/phpscripts/transactions.php', {
-      const response = await fetch('http://localhost/expscripts/api/transactions.php', {
+      const response = await fetch('http://localhost/api/transactions.php', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -147,7 +147,7 @@ const confirmDelete = async () => {
     const expenseToDeleteDetails = expenses[expenseToDelete];
 
     try {
-      const response = await fetch('http://localhost/expscripts/api/deletetransactions.php', {
+      const response = await fetch('http://localhost/api/deletetransactions.php', {
       // const response = await fetch('https://expmanager.free.nf/phpscripts/deletetransactions.php', {
         method: 'POST',
         headers: {
