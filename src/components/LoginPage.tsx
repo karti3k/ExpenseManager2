@@ -64,8 +64,8 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
         event.preventDefault();
 
         const url = isSignUp
-            ? 'http://localhost/expscripts/signup.php'
-            : 'http://localhost/expscripts/signin.php';
+            ? 'http://localhost/expscripts/api/signup.php'
+            : 'http://localhost/expscripts/api/signin.php';
 
 //         const url = isSignUp
 //     ? ' https://expmanager.vercel.app/api/signup'
