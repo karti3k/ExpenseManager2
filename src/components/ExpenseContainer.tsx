@@ -64,8 +64,8 @@ const ExpenseContainer: React.FC<ExpenseContainerProps> = ({ username, onTransac
     if (username) {
       try {
         // const response = await fetch(`http://localhost/project/ExpenseManager2/phpscripts/charts.php?username=${username}`);
-        // const response = await fetch(`http://localhost/expscripts/charts.php?username=${username}`);
-        const response = await fetch(`https://expmanager.free.nf/phpscripts/charts.php?username=${username}&theme=${theme}`);
+        const response = await fetch(`http://localhost/expscripts/api/charts.php?username=${username}&theme=${theme}`);
+        // const response = await fetch(`https://expmanager.free.nf/phpscripts/charts.php?username=${username}&theme=${theme}`);
         const result = await response.json();
         if (result.success) {
           setChartUrl(result.chart_url);
@@ -83,8 +83,8 @@ const ExpenseContainer: React.FC<ExpenseContainerProps> = ({ username, onTransac
     if (!username) return;
 
     try {
-      // const response = await fetch(`http://localhost/expscripts/transactions.php?username=${username}&theme=${theme}`);
-      const response = await fetch(`https://expmanager.free.nf/phpscripts/transactions.php?username=${username}`);
+      const response = await fetch(`http://localhost/expscripts/api/transactions.php?username=${username}&theme=${theme}`);
+      // const response = await fetch(`https://expmanager.free.nf/phpscripts/transactions.php?username=${username}`);
       const result = await response.json();
 
       if (result.success) {
@@ -110,8 +110,8 @@ const ExpenseContainer: React.FC<ExpenseContainerProps> = ({ username, onTransac
   };
 
   try {
-    const response = await fetch('https://expmanager.free.nf/phpscripts/transactions.php', {
-      // const response = await fetch('http://localhost/expscripts/transactions.php', {
+    // const response = await fetch('https://expmanager.free.nf/phpscripts/transactions.php', {
+      const response = await fetch('http://localhost/expscripts/api/transactions.php', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -147,8 +147,8 @@ const confirmDelete = async () => {
     const expenseToDeleteDetails = expenses[expenseToDelete];
 
     try {
-      // const response = await fetch('http://localhost/expscripts/deletetransactions.php', {
-      const response = await fetch('https://expmanager.free.nf/phpscripts/deletetransactions.php', {
+      const response = await fetch('http://localhost/expscripts/api/deletetransactions.php', {
+      // const response = await fetch('https://expmanager.free.nf/phpscripts/deletetransactions.php', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -301,12 +301,12 @@ const cancelDelete = () => {
           )
         ) : (
           <div className='flex items-center justify-center'>
-            <p className='lg:hidden flex text-white pt-28 mt-28'><span>Currently unavailable for mobile devices!</span></p>
-            <p className='hidden lg:-mt-28 lg:w-[80%] lg:h-[20%] lg:flex justify-center items-center lg:items-start'>{chartUrl ? (
-              <img src={`${chartUrl}`} alt="Expense Chart" />
+            <p className='flex items-center justify-center text-white pt-28 mt-28 md:pt-28 md:mt-0'><span>Currently unavailable!</span></p>
+            {/* <p className='lg:-mt-28 lg:w-[80%] lg:h-[20%] lg:flex justify-center items-center lg:items-start'>{chartUrl ? (
+              <img src={`${chartUrl}`} alt="Expense Chart" className='hidden' />
             ) : (
               <span>Please add expenses first!</span>
-            )}</p>
+            )}</p> */}
           </div>
         )}
         </div>

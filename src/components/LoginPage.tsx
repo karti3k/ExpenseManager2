@@ -63,13 +63,13 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
-        // const url = isSignUp
-        //     ? 'http://localhost/expscripts/signup.php'
-        //     : 'http://localhost/expscripts/signin.php';
-
         const url = isSignUp
-    ? ' https://expmanager.vercel.app/api/signup'
-  : ' https://expmanager.vercel.app/api/signin';
+            ? 'http://localhost/expscripts/api/signup.php'
+            : 'http://localhost/expscripts/api/signin.php';
+
+//         const url = isSignUp
+//     ? ' https://expmanager.vercel.app/api/signup'
+//   : ' https://expmanager.vercel.app/api/signin';
 
         const body = isSignUp
             ? JSON.stringify({ email, username, password })

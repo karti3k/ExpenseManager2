@@ -16,8 +16,8 @@ const MainPage: React.FC<MainPageProps> = ({ username }) => {
   const fetchTotals = async () => {
     if (!username) return;
     try {
-      const response = await fetch(`https://expmanager.free.nf/phpscripts/fetchTotals.php?username=${username}`);
-      // const response = await fetch(`http://localhost/expscripts/fetchTotals.php?username=${username}`);
+      // const response = await fetch(`https://expmanager.free.nf/phpscripts/fetchTotals.php?username=${username}`);
+      const response = await fetch(`http://localhost/expscripts/api/fetchTotals.php?username=${username}`);
       const result = await response.json();
 
       if (result.success) {
